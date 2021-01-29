@@ -21,6 +21,12 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(LED_STRIP_PIN, OUTPUT);
   dht.begin();
+
+
+  int temp_low_thres = 0
+  int temp_high_thres = 0
+  int thres_humidity = 0
+  int thres_light = 800 
 }
 
 void loop() {
@@ -57,7 +63,7 @@ void loop() {
 
   digitalWrite(LED_BUILTIN, LOW);
 
-  if (lightLevel < 300) {
+  if (lightLevel < 800) {
     digitalWrite(LED_STRIP_PIN, HIGH);
   } else {
     digitalWrite(LED_STRIP_PIN, LOW);
