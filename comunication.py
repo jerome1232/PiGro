@@ -17,15 +17,24 @@ class Comune_Ardu:
         "<Communication is happening>"
 
     Attributes:
-        start_char      The character expected at the start of each full message
-        end_char        The chracter expected at the end of each full message
+        start_char      The character expected at the start of each full
+                            message.
+        end_char        The chracter expected at the end of each full 
+                            message.
         dev             The device path to the Arduino's serial device
-        rate            The baud reate at which communication will occure
-
+        rate            The baud reate at which communication will 
+                            occure.
         ser             A serial object to interact with the Arduino
     '''
 
-    def __init__(self, start_char = None, end_char = None, dev = None, rate = None):
+    def __init__(
+            self,
+            start_char = None,
+            end_char = None,
+            dev = None,
+            rate = None
+        ):
+        '''Class constructor.'''
         self.start_char = '<' if start_char is None else start_char
         self.end_char = '>' if end_char is None else end_char
         self.dev = '/dev/ttyACM0' if dev is None else dev
@@ -94,6 +103,4 @@ while True:
     print()
     print()
 
-
-
-
+    time.sleep(.1)
