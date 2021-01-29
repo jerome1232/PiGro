@@ -1,4 +1,5 @@
 #include <DHT.h>
+#include "PiSerial.h"
 
 // ****************
 // * Setting pins *
@@ -23,10 +24,10 @@ void setup() {
   dht.begin();
 
 
-  int temp_low_thres = 0
-  int temp_high_thres = 0
-  int thres_humidity = 0
-  int thres_light = 800 
+  int temp_low_thres = 0;
+  int temp_high_thres = 0;
+  int thres_humidity = 0;
+  int thres_light = 800;
 }
 
 void loop() {
