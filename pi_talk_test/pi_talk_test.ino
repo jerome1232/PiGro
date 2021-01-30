@@ -15,6 +15,8 @@
 
 DHT dht(DHT_PIN, DHT_TYPE);
 
+int light_amount = 0;
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
@@ -40,16 +42,11 @@ void loop() {
     Serial.print(data);
     Serial.print('>');
   }
-  
-  // test code to test out MOSFET
-  digitalWrite(LED_STRIP_PIN, HIGH);
-  digitalWrite(LED_BUILTIN, HIGH);
-  digitalWrite(LED_STRIP_PIN, LOW);
 
-  
   float temp_humid[2];
   checkTempHumid(temp_humid);
-  int lightLevel = checkLightLevel();
+  int lightLevel = levelLights(1000, 900);
+	 
 
   Serial.print('<');
   Serial.print("light:");
@@ -61,14 +58,6 @@ void loop() {
   Serial.print("humidity:");
   Serial.print(temp_humid[1]);
   Serial.print('>');
-
-  digitalWrite(LED_BUILTIN, LOW);
-
-  if (lightLevel < 800) {
-    digitalWrite(LED_STRIP_PIN, HIGH);
-  } else {
-    digitalWrite(LED_STRIP_PIN, LOW);
-  }
 
   delay(5000);
 
@@ -88,5 +77,31 @@ void checkTempHumid(float data[]) {
 // and returns raw reading.
 int checkLightLevel() {
   int lightLevel = analogRead(LIGHT_SENSOR_PIN);
+  return lightLevel;
+}
+
+int levelLights(int thresh_high, int thresh_low) {
+  analogWrite(LED_STRIP_PIN, light_amount);
+  delay(100);
+  int lightLevel = checkLightLevel();
+  
+  if (lightLevel < thresh_low) {
+	while (lightLevel <= thresh_high) {
+		if (light_amount == 255) break;
+		light_amount++;
+		analogWrite(LED_STRIP_PIN, light_amount);
+		delay(100);
+		lightLevel = checkLightLevel();
+	}
+  } else {
+	while (lightLevel >= thresh_low) {
+		if (light_amount == 0) break;
+		light_amount--;
+		analogWrite(LED_STRIP_PIN, light_amount);
+		delay(100);
+		lightLevel = checkLightLevel();
+	}
+  }
+
   return lightLevel;
 }
