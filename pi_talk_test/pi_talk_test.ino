@@ -7,11 +7,12 @@
 #define DHT_PIN 		8
 #define DHT_TYPE 		DHT11
 #define LED_STRIP_PIN 		3
-#define WATER_PUMP_PIN		4
-#define VALVE_01		5
-#define VALVE_02		6
-#define VALVE_03		7
+#define WATER_PUMP_PIN		6
+#define VALVE_01		7
+#define VALVE_02		5
+#define VALVE_03		4
 #define LIGHT_SENSOR_PIN 	A0
+#define HEATER_PIN		9
 
 DHT dht(DHT_PIN, DHT_TYPE);
 
@@ -23,6 +24,11 @@ void setup() {
 
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(LED_STRIP_PIN, OUTPUT);
+  pinMode(WATER_PUMP_PIN, OUTPUT);
+  pinMode(VALVE_01, OUTPUT);
+  pinMode(VALVE_02, OUTPUT);
+  pinMode(VALVE_03, OUTPUT); 
+  pinMode(DHT_PIN, INPUT);
   dht.begin();
 
 
@@ -43,9 +49,11 @@ void loop() {
     Serial.print('>');
   }
 
+
   float temp_humid[2];
   checkTempHumid(temp_humid);
-  int lightLevel = levelLights(1000, 900);
+  /*int lightLevel = levelLights(1000, 900);*/
+  int lightLevel = 0;
 	 
 
   Serial.print('<');
@@ -59,6 +67,25 @@ void loop() {
   Serial.print(temp_humid[1]);
   Serial.print('>');
 
+  //digitalWrite(VALVE_01, HIGH);
+  //delay(1000);
+  //digitalWrite(VALVE_01, LOW);
+  //digitalWrite(VALVE_02, HIGH);
+  //delay(1000);
+  //digitalWrite(VALVE_02, LOW);
+  //digitalWrite(VALVE_03, HIGH);
+  //delay(1000);
+  //digitalWrite(VALVE_03, LOW);
+  //digitalWrite(WATER_PUMP_PIN, HIGH);
+  //delay(700);
+  //digitalWrite(WATER_PUMP_PIN, LOW);
+
+  digitalWrite(LED_STRIP_PIN, HIGH);
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(1000);
+  digitalWrite(LED_STRIP_PIN, LOW);
+  digitalWrite(LED_BUILTIN, LOW);
+  
   delay(5000);
 
 }
