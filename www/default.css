@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #77DD77;
+}
+
+nav {
+  margin: 0;
+  padding: 0;
+}
+
+nav>ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #140004;
+}
+
+nav>ul>li {
+  float: left;
+}
+
+nav>ul>li>a {
+  display: block;
+  color: #2D8739;
+  padding: 14px 16px;
+  margin: 10px;
+  text-align: center;
+  text-decoration: none;
+}

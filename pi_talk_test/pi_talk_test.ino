@@ -29,6 +29,7 @@ void setup() {
   pinMode(VALVE_02, OUTPUT);
   pinMode(VALVE_03, OUTPUT); 
   pinMode(DHT_PIN, INPUT);
+  pinMode(LIGHT_SENSOR_PIN, INPUT);
   dht.begin();
 
 
@@ -48,12 +49,16 @@ void loop() {
     Serial.print(data);
     Serial.print('>');
   }
+  
+  digitalWrite(LED_STRIP_PIN, LOW);
 
+  delay(5000);
+  digitalWrite(LED_BUILTIN, HIGH);
 
   float temp_humid[2];
   checkTempHumid(temp_humid);
   /*int lightLevel = levelLights(1000, 900);*/
-  int lightLevel = 0;
+  int lightLevel = checkLightLevel();
 	 
 
   Serial.print('<');
@@ -67,26 +72,8 @@ void loop() {
   Serial.print(temp_humid[1]);
   Serial.print('>');
 
-  //digitalWrite(VALVE_01, HIGH);
-  //delay(1000);
-  //digitalWrite(VALVE_01, LOW);
-  //digitalWrite(VALVE_02, HIGH);
-  //delay(1000);
-  //digitalWrite(VALVE_02, LOW);
-  //digitalWrite(VALVE_03, HIGH);
-  //delay(1000);
-  //digitalWrite(VALVE_03, LOW);
-  //digitalWrite(WATER_PUMP_PIN, HIGH);
-  //delay(700);
-  //digitalWrite(WATER_PUMP_PIN, LOW);
-
-  digitalWrite(LED_STRIP_PIN, HIGH);
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_STRIP_PIN, LOW);
   digitalWrite(LED_BUILTIN, LOW);
-  
-  delay(5000);
+  delay(300000);
 
 }
 
@@ -103,8 +90,7 @@ void checkTempHumid(float data[]) {
 // reads analog reading from photoresistor
 // and returns raw reading.
 int checkLightLevel() {
-  int lightLevel = analogRead(LIGHT_SENSOR_PIN);
-  return lightLevel;
+  return analogRead(LIGHT_SENSOR_PIN);
 }
 
 int levelLights(int thresh_high, int thresh_low) {
@@ -113,21 +99,21 @@ int levelLights(int thresh_high, int thresh_low) {
   int lightLevel = checkLightLevel();
   
   if (lightLevel < thresh_low) {
-	while (lightLevel <= thresh_high) {
-		if (light_amount == 255) break;
-		light_amount++;
-		analogWrite(LED_STRIP_PIN, light_amount);
-		delay(100);
-		lightLevel = checkLightLevel();
-	}
+    while (lightLevel <= thresh_high) {
+      if (light_amount == 255) break;
+      light_amount++;
+      analogWrite(LED_STRIP_PIN, light_amount);
+      delay(100);
+      lightLevel = checkLightLevel();
+    }
   } else {
-	while (lightLevel >= thresh_low) {
-		if (light_amount == 0) break;
-		light_amount--;
-		analogWrite(LED_STRIP_PIN, light_amount);
-		delay(100);
-		lightLevel = checkLightLevel();
-	}
+    while (lightLevel >= thresh_low) {
+      if (light_amount == 0) break;
+      light_amount--;
+      analogWrite(LED_STRIP_PIN, light_amount);
+      delay(100);
+      lightLevel = checkLightLevel();
+    }
   }
 
   return lightLevel;

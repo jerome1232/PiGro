@@ -1,0 +1,14 @@
+[Unit]
+Description=Serial/Unix Domain socket comunication
+After=network.target
+StartLimitIntervalSec=4
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=2
+User=www-data
+ExecStart=/usr/bin/env python3 /home/pi/PiGro/comunication.py
+
+[Install]
+WantedBy=multi-user.target
