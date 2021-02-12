@@ -1,6 +1,6 @@
 #charts {
 	display: grid;
-	grid-template-columns: 500px 500px;
+	grid-template-columns: 2fr 2fr;
 	margin: 0 auto;
 	justify-content: center;
 }

@@ -95,7 +95,7 @@ int checkLightLevel() {
 
 // levelLights
 //
-// Turns of LED's to check the current brightness
+// Turns off LED's to check the current brightness
 // and turn on/off LED's based on the light level
 void levelLights(int thresh_low) {
 
