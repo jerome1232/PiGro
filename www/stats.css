@@ -1,0 +1,28 @@
+#charts {
+	display: grid;
+	grid-template-columns: 500px 500px;
+	margin: 0 auto;
+	justify-content: center;
+}
+
+.charts {
+	box-shadow: 0.4em 0.4em 0.2em green;
+	margin: 1em auto;
+	background-color: #77DD88;
+	padding: 0.5em;
+	border-radius: 25px;
+}
+
+#temp_graph {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#temp_radio {
+	width: 100%;
+	margin: 0.5em;
+	text-align: center;
+}
+

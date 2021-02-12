@@ -16,10 +16,21 @@
         <li><a href="about.html">About</a></li>
       </ul>
     </nav>
-    <h1>Virtual Host is working for html</h1>
-    <div id="temp_graph"></div>
-    <div id="light_graph"></div>
-    <div id="humidity_graph"></div>
+    <div id="main">
+      <h1>Environmental Statistics</h1>
+      <div id="charts">
+        <div id="temp_graph" class="charts">
+          <div id="temp_radio">
+            <input type="radio" id="farenheit" name="units" value="true" checked>
+            <label for="farenheit">Farenheit</label>
+            <input type="radio" id="celsius" name="units" value="false">
+            <label for="celsius">Celsius</label>
+          </div> <!-- temp_radio -->
+        </div> <!-- temp_graph -->
+        <div id="light_graph" class="charts"></div>
+        <div id="humidity_graph" class="charts"></div>
+      </div> <!-- charts -->
+    </div> <!-- main -->
     <script src=stats.js></script>
   </body>
 </html>

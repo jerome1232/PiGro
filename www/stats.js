@@ -1,30 +1,30 @@
 
 // Read data
-var data = d3.json("data/sensor_data.json")
-  
-data = data.then(function(data) {
-  var format = d3.timeFormat("%Y-%m-%d %I:%M:%S.%L %p");
-  var isFarenheit = true;
+var data = d3.json("data/sensor_data.json");
 
-  data.forEach(function(d) {
-    d.date = new Date(d.time_stamp * 1000);
-    //d.date = format(d.time_stamp * 1000);
-    d.humidity = d.humidity;
-    if (isFarenheit) {
-      d.temp = d.temp * (9.0/5.0) + 32;
-    } else {
-      d.temp = d.temp;
-    }
-    console.log(d.date);
-    console.log('Temp: ', d.temp);
-    console.log('Humidity: ', d.humidity);
-    console.log('Light: ', d.light);
+const button = d3.selectAll('input[name="units"]');
+
+function handle(data, isFarenheit) {
+  data.then(function(data) {
+    data.forEach(function(d, isFarenheit = true) {
+      d.date = new Date(d.time_stamp * 1000);
+      if (isFarenheit) {
+        d.temp = d.temp * (9.0/5.0) + 32;
+      } else {
+        d.temp = d.temp;
+      }
+    })
+    draw_temp_graph(data);
+    draw_humidity_graph(data);
+    draw_light_graph(data);
   })
-  draw_temp_graph(data);
-  draw_humidity_graph(data);
-  draw_light_graph(data);
+}
+
+button.on('change', function(d) {
+  console.log('button changed to ' + this.value);
 })
 
+handle(data, true);
 
 function draw_temp_graph(data) {
   // set dimensions and margins
@@ -110,7 +110,7 @@ function draw_light_graph(data) {
     height = 400 - margin.top - margin.bottom;
 
   // Create svg
-  var svg = d3.select("#temp_graph")
+  var svg = d3.select("#light_graph")
     .append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)

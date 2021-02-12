@@ -4,6 +4,13 @@ body {
   background-color: #77DD77;
 }
 
+#main {
+  margin: 1em;
+  padding: 1em;
+  justify-content: center;
+  text-align: center;
+}
+
 nav {
   margin: 0;
   padding: 0;

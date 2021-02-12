@@ -17,48 +17,47 @@
 DHT dht(DHT_PIN, DHT_TYPE);
 
 int light_amount = 0;
+int temp_low_thres = 0;
+int temp_high_thres = 0;
+int thresh_humidity = 0;
+int thresh_light = 800;
 
 void setup() {
-  // put your setup code here, to run once:
+  // Begin serial communication at
+  // baude rate of 9600
   Serial.begin(9600);
 
+  // Set pins as OUTPUT 
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(LED_STRIP_PIN, OUTPUT);
   pinMode(WATER_PUMP_PIN, OUTPUT);
   pinMode(VALVE_01, OUTPUT);
   pinMode(VALVE_02, OUTPUT);
   pinMode(VALVE_03, OUTPUT); 
+
+  // Set pins as INPUT
   pinMode(DHT_PIN, INPUT);
   pinMode(LIGHT_SENSOR_PIN, INPUT);
+
+  // begin dht sensor temp monitor
   dht.begin();
 
-
-  int temp_low_thres = 0;
-  int temp_high_thres = 0;
-  int thres_humidity = 0;
-  int thres_light = 800;
+  // A small delay at startup
+  delay(1000);
 }
 
 void loop() {
   String data = "";
-
-  if (Serial.available() > 0) {
-    String data = Serial.readStringUntil('>');
-    Serial.print('<');
-    Serial.print("recv: ");
-    Serial.print(data);
-    Serial.print('>');
-  }
-  
-  digitalWrite(LED_STRIP_PIN, LOW);
-
-  delay(5000);
+  float temp_humid[2];
   digitalWrite(LED_BUILTIN, HIGH);
 
-  float temp_humid[2];
+  if (Serial.available() > 0) {
+    data = Serial.readStringUntil('>');
+  }
+  
   checkTempHumid(temp_humid);
-  /*int lightLevel = levelLights(1000, 900);*/
   int lightLevel = checkLightLevel();
+  levelLights(thresh_light);
 	 
 
   Serial.print('<');
@@ -93,28 +92,17 @@ int checkLightLevel() {
   return analogRead(LIGHT_SENSOR_PIN);
 }
 
-int levelLights(int thresh_high, int thresh_low) {
-  analogWrite(LED_STRIP_PIN, light_amount);
-  delay(100);
-  int lightLevel = checkLightLevel();
-  
-  if (lightLevel < thresh_low) {
-    while (lightLevel <= thresh_high) {
-      if (light_amount == 255) break;
-      light_amount++;
-      analogWrite(LED_STRIP_PIN, light_amount);
-      delay(100);
-      lightLevel = checkLightLevel();
-    }
-  } else {
-    while (lightLevel >= thresh_low) {
-      if (light_amount == 0) break;
-      light_amount--;
-      analogWrite(LED_STRIP_PIN, light_amount);
-      delay(100);
-      lightLevel = checkLightLevel();
-    }
-  }
 
-  return lightLevel;
+// levelLights
+//
+// Turns of LED's to check the current brightness
+// and turn on/off LED's based on the light level
+void levelLights(int thresh_low) {
+
+  digitalWrite(LED_STRIP_PIN, LOW);
+  delay(100);
+
+  if (checkLightLevel() < thresh_low) {
+      digitalWrite(LED_STRIP_PIN, HIGH);
+    }
 }
