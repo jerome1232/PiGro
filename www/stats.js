@@ -2,7 +2,7 @@
 var data = d3.json("data/sensor_data.json");
 const button = d3.selectAll('input[name="units"]');
 
-draw_temp_graph(data, button.property("value"));
+draw_temp_graph(data, (button.property("value") == 'true'));
 draw_light_graph(data);
 draw_humidity_graph(data);
 
@@ -12,10 +12,23 @@ button.on('change', function(d) {
   draw_temp_graph(data, isTrue);
 })
 
+function draw_latest_data(data, isFarenheit) {
+  data.then(function(data) {
+    data.forEach(function(d) {
+      d.d_date = new Date(d.time_stamp * 1000);
+      if (isFarenheit) {
+        d.t_temp = d.temp *(9.0/5.0) + 32;
+      } else {
+        d.t_temp = d.temp;
+      }
+    })
+  })
+}
+
 function draw_temp_graph(data, isFarenheit) {
   data.then(function(data) {
     data.forEach(function(d) {
-      d.date = new Date(d.time_stamp * 1000);
+      d.d_date = new Date(d.time_stamp * 1000);
       if (isFarenheit) {
         d.t_temp = d.temp * (9.0/5.0) + 32;
       } else {
@@ -47,7 +60,7 @@ function draw_temp_graph(data, isFarenheit) {
 
   // Add X axis
   var x = d3.scaleTime()
-    .domain(d3.extent(data, function(d) { return d.date; }))
+    .domain(d3.extent(data, function(d) { return d.d_date; }))
     .range([0, width]);
   svg.append("g")
     .attr("transform", "translate(0," + height + ")")
@@ -90,10 +103,10 @@ function draw_temp_graph(data, isFarenheit) {
   svg.append("path")
     .datum(data)
     .attr("fill", "none")
-    .attr("stroke", "brown")
+    .attr("stroke", "#00a899")
     .attr("stroke-width", 1.5)
     .attr("d", d3.line()
-      .x(function(d) { return x(d.date) })
+      .x(function(d) { return x(d.d_date) })
       .y(function(d) { return y(d.t_temp) })
     )
   })
@@ -101,6 +114,9 @@ function draw_temp_graph(data, isFarenheit) {
 
 function draw_light_graph(data) {
   data.then(function(data) {
+    data.forEach(function(d) {
+      d.d_date = new Date(d.time_stamp * 1000);
+    })
     // set dimensions and margins
     var margin = {top: 50, right: 30, bottom: 70, left: 60 },
       width = 460 - margin.left - margin.right,
@@ -126,7 +142,7 @@ function draw_light_graph(data) {
 
     // Add X axis
     var x = d3.scaleTime()
-      .domain(d3.extent(data, function(d) { return d.date; }))
+      .domain(d3.extent(data, function(d) { return d.d_date; }))
       .range([0, width]);
     svg.append("g")
       .attr("transform", "translate(0," + height + ")")
@@ -169,10 +185,10 @@ function draw_light_graph(data) {
     svg.append("path")
       .datum(data)
       .attr("fill", "none")
-      .attr("stroke", "brown")
+      .attr("stroke", "#e10082")
       .attr("stroke-width", 1.5)
       .attr("d", d3.line()
-        .x(function(d) { return x(d.date) })
+        .x(function(d) { return x(d.d_date) })
         .y(function(d) { return y(d.light) })
       )
   })
@@ -180,6 +196,9 @@ function draw_light_graph(data) {
 
 function draw_humidity_graph(data) {
   data.then(function(data) {
+    data.forEach(function(d) {
+      d.d_date = new Date(d.time_stamp * 1000);
+    })
     // set dimensions and margins
     var margin = {top: 50, right: 30, bottom: 70, left: 60 },
       width = 460 - margin.left - margin.right,
@@ -205,7 +224,7 @@ function draw_humidity_graph(data) {
 
     // Add X axis
     var x = d3.scaleTime()
-      .domain(d3.extent(data, function(d) { return d.date; }))
+      .domain(d3.extent(data, function(d) { return d.d_date; }))
       .range([0, width]);
     svg.append("g")
       .attr("transform", "translate(0," + height + ")")
@@ -248,10 +267,10 @@ function draw_humidity_graph(data) {
     svg.append("path")
       .datum(data)
       .attr("fill", "none")
-      .attr("stroke", "brown")
+      .attr("stroke", "#b59000")
       .attr("stroke-width", 1.5)
       .attr("d", d3.line()
-        .x(function(d) { return x(d.date) })
+        .x(function(d) { return x(d.d_date) })
         .y(function(d) { return y(d.humidity) })
       )
   })
