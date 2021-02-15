@@ -6,9 +6,9 @@
 }
 
 .charts {
-	box-shadow: 0.4em 0.4em 0.2em green;
+	box-shadow: 0.4em 0.4em 0.2em;
 	margin: 1em auto;
-	background-color: #77DD88;
+	background-color: #edebd4;
 	padding: 0.5em;
 	border-radius: 25px;
 }
@@ -25,4 +25,3 @@
 	margin: 0.5em;
 	text-align: center;
 }
-

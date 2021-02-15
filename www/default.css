@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #77DD77;
+  background-color: #fcf9e2;
 }
 
 #main {
@@ -21,7 +21,7 @@ nav>ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #140004;
+  background-color: #edebd4;
 }
 
 nav>ul>li {
@@ -30,9 +30,14 @@ nav>ul>li {
 
 nav>ul>li>a {
   display: block;
-  color: #2D8739;
+  color: #7957c7;
   padding: 14px 16px;
   margin: 10px;
   text-align: center;
   text-decoration: none;
 }
+
+nav>ul>li.active {
+	background-color: #fcf9e2;
+}
+
