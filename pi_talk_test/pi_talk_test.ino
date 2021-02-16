@@ -34,6 +34,7 @@ void setup() {
   pinMode(VALVE_01, OUTPUT);
   pinMode(VALVE_02, OUTPUT);
   pinMode(VALVE_03, OUTPUT); 
+  pinMode(HEATER_PIN, OUTPUT);
 
   // Set pins as INPUT
   pinMode(DHT_PIN, INPUT);
@@ -58,6 +59,7 @@ void loop() {
   checkTempHumid(temp_humid);
   int lightLevel = checkLightLevel();
   levelLights(thresh_light);
+  heat(26, temp_humid[0]);
 	 
 
   Serial.print('<');
@@ -105,4 +107,15 @@ void levelLights(int thresh_low) {
   if (checkLightLevel() < thresh_low) {
       digitalWrite(LED_STRIP_PIN, HIGH);
     }
+}
+
+// heat
+//
+// Turns on the heaters
+void heat(int thresh_low, int cur_temp) {
+  if (cur_temp < thresh_low) {
+    digitalWrite(HEATER_PIN, HIGH);
+  } else {
+    digitalWrite(HEATER_PIN, LOW);
+  }
 }
