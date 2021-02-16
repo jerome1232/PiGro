@@ -142,4 +142,4 @@ cython_debug/
 *~
 
 # Data files
-sensor_data.json
+www/data/sensor_data.json
