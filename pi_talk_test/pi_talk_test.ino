@@ -122,10 +122,11 @@ bool levelLights(int thresh_low) {
 // heat
 //
 // Turns on the heaters
-void heat(int thresh_low, int cur_temp) {
+bool heat(int thresh_low, int cur_temp) {
   if (cur_temp < thresh_low) {
     digitalWrite(HEATER_PIN, HIGH);
-  } else {
-    digitalWrite(HEATER_PIN, LOW);
-  }
+    return true;
+  } 
+  digitalWrite(HEATER_PIN, LOW);
+  return false;
 }
