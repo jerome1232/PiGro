@@ -16,11 +16,11 @@
 
 DHT dht(DHT_PIN, DHT_TYPE);
 
-int light_amount = 0;
-int temp_low_thres = 0;
-int temp_high_thres = 0;
-int thresh_humidity = 0;
-int thresh_light = 800;
+int light_amount = 0;     // A variable to hold light level
+int temp_low_thres = 26;  // low thresh at which heater kicks on
+int temp_high_thres = 0;  // high thresh at which heater kicks off
+int thresh_humidity = 0;  // point at which to humidify the air 
+int thresh_light = 800;   // thresh at which to turn on lights
 
 void setup() {
   // Begin serial communication at
@@ -50,6 +50,9 @@ void setup() {
 void loop() {
   String data = "";
   float temp_humid[2];
+  bool lightsOn = false;
+  bool heatOn = false;
+
   digitalWrite(LED_BUILTIN, HIGH);
 
   if (Serial.available() > 0) {
@@ -58,9 +61,8 @@ void loop() {
   
   checkTempHumid(temp_humid);
   int lightLevel = checkLightLevel();
-  levelLights(thresh_light);
-  heat(26, temp_humid[0]);
-	 
+  lightsOn = levelLights(thresh_light);
+  heatOn = heat(26, temp_humid[0]);
 
   Serial.print('<');
   Serial.print("light:");
@@ -71,6 +73,12 @@ void loop() {
   Serial.print(',');
   Serial.print("humidity:");
   Serial.print(temp_humid[1]);
+  Serial.print(',');
+  Serial.print("heat:");
+  Serial.print(heatOn);
+  Serial.print(',');
+  Serial.print("light_status:");
+  Serial.print(lightsOn);
   Serial.print('>');
 
   digitalWrite(LED_BUILTIN, LOW);
@@ -99,14 +107,16 @@ int checkLightLevel() {
 //
 // Turns off LED's to check the current brightness
 // and turn on/off LED's based on the light level
-void levelLights(int thresh_low) {
+bool levelLights(int thresh_low) {
 
   digitalWrite(LED_STRIP_PIN, LOW);
   delay(100);
 
   if (checkLightLevel() < thresh_low) {
       digitalWrite(LED_STRIP_PIN, HIGH);
+      return true;
     }
+  return false;
 }
 
 // heat
