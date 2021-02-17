@@ -11,6 +11,8 @@ temp = None
 light = None
 humidity = None
 time_stamp = None
+heat = None
+light_status = None
 
 while True:
     time.sleep(.2)
@@ -24,6 +26,7 @@ while True:
         if len(tmp) != 2:
             print('Malformed data')
             break
+        print(tmp[0], tmp[1])
         if tmp[0] == 'light':
             light = tmp[1]
         elif tmp[0] == 'temp':
@@ -31,9 +34,10 @@ while True:
         elif tmp[0] == 'humidity':
             humidity = tmp[1]
         elif tmp[0] == 'heat':
-            heat = tmp[1]
-        elif temp[0] == 'light_status':
-            light_status = tmp[1]
+            heat = True if int(tmp[1]) == 1 else False
+        elif tmp[0] == 'light_status':
+            light_status = True if int(tmp[1]) == 1 else False
+            print("Debug: light: ", light_status, tmp[1], type(tmp[1]))
 
     print('Time:',
         datetime.datetime.fromtimestamp(time_stamp).strftime(
@@ -43,10 +47,19 @@ while True:
     print('Temp: ', temp)
     print('Humidity: ', humidity)
     print('Light level: ', light)
+    print('Heater on?: ', heat)
+    print('Lights on?: ', light_status)
     print()
 
     sensor_data = {}
-    for var in ['time_stamp', 'temp', 'humidity', 'light']:
+    for var in [
+            'time_stamp',
+            'temp',
+            'humidity',
+            'light',
+            'heat',
+            'light_status'
+        ]:
         sensor_data[var] = eval(var)
 
     file_path = '/home/pi/PiGro/www/data/sensor_data.json'
