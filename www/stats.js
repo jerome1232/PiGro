@@ -24,7 +24,7 @@ function draw_latest_data(data, isFarenheit) {
       }
     })
   data = data[data.length - 1];
-  var data = [ data.t_temp, data.humidity, data.light, data.heat ];
+  var data = [ data.t_temp, data.humidity, data.light, data.heat, data.light_status ];
   d3.select("#curr_data").selectAll("p").
     data(data).
     enter().
