@@ -9,7 +9,7 @@ draw_humidity_graph(data);
 
 button.on('change', function(d) {
   d3.select("#temp_graph").select("svg").remove();
-  d3.select("#curr_data").selectAll("p").remove();
+  d3.select("#curr_data").selectAll("span").remove();
   var isTrue = (this.value === 'true');
   draw_temp_graph(data, isTrue);
   draw_latest_data(data, isTrue);
@@ -20,7 +20,7 @@ function draw_latest_data(data, isFarenheit) {
     data.forEach(function(d) {
       d.d_date = new Date(d.time_stamp * 1000);
       if (isFarenheit) {
-        d.t_temp = d.temp *(9.0/5.0) + 32;
+        d.t_temp = (d.temp *(9.0/5.0) + 32).toFixed(2);
       } else {
         d.t_temp = d.temp;
       }
@@ -28,17 +28,19 @@ function draw_latest_data(data, isFarenheit) {
   // geting the lastest data only
   data = data[data.length - 1];
   para = d3.selectAll("#curr_data")
-    .datum(data)
-    .append("p")
-      .text( function (d) { return "Temp: " + d.t_temp; })
-    .append("p")
-      .text( function (d) { return "Humidity: " + d.humidity; })
-    .append("p")
-      .text( function (d) { return "Light Level: " + d.light; })
-    .append("p")
-      .text( function (d) { return "Heater on: " + d.heat; })
-    .append("p")
-      .text( function (d) { return "Lights on: " + d.light_status; });
+    .datum(data);
+
+  // Append paragraphs
+  para.append("span")
+    .text( function (d) { return "Temp: " + d.t_temp + "\u00B0"; });
+  para.append("span")
+    .text( function (d) { return "Humidity: " + Math.round(d.humidity) + "%"; });
+  para.append("span")
+    .text( function (d) { return "Light Level: " + d.light; });
+  para.append("span")
+    .text( function (d) { return "Heater on: " + d.heat; });
+  para.append("span")
+    .text( function (d) { return "Lights on: " + d.light_status; });
   })
 }
 

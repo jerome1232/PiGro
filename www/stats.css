@@ -25,3 +25,11 @@
 	margin: 0.5em;
 	text-align: center;
 }
+
+#curr_data {
+	grid-column: 1 / span 2;
+}
+
+#curr_data>span {
+	margin: 1em;
+}
