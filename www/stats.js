@@ -2,6 +2,7 @@
 var data = d3.json("data/sensor_data.json");
 const button = d3.selectAll('input[name="units"]');
 
+draw_latest_data(data, true);
 draw_temp_graph(data, (button.property("value") == 'true'));
 draw_light_graph(data);
 draw_humidity_graph(data);
@@ -22,6 +23,16 @@ function draw_latest_data(data, isFarenheit) {
         d.t_temp = d.temp;
       }
     })
+  data = data[data.length - 1];
+  var data = [ data.t_temp, data.humidity, data.light ];
+  d3.select("#curr_data").selectAll("p").
+    data(data).
+    enter().
+    append("p").
+    text(function(d) { 
+      console.log(d);
+      return d;
+    });
   })
 }
 
