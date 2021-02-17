@@ -2,15 +2,17 @@
 var data = d3.json("data/sensor_data.json");
 const button = d3.selectAll('input[name="units"]');
 
-draw_latest_data(data, true);
-draw_temp_graph(data, (button.property("value") == 'true'));
+draw_latest_data(data, button.property("value") == 'true');
+draw_temp_graph(data, button.property("value") == 'true');
 draw_light_graph(data);
 draw_humidity_graph(data);
 
 button.on('change', function(d) {
   d3.select("#temp_graph").select("svg").remove();
+  d3.select("#curr_data").selectAll("p").remove();
   var isTrue = (this.value === 'true');
   draw_temp_graph(data, isTrue);
+  draw_latest_data(data, isTrue);
 })
 
 function draw_latest_data(data, isFarenheit) {
@@ -23,16 +25,20 @@ function draw_latest_data(data, isFarenheit) {
         d.t_temp = d.temp;
       }
     })
+  // geting the lastest data only
   data = data[data.length - 1];
-  var data = [ data.t_temp, data.humidity, data.light, data.heat, data.light_status ];
-  d3.select("#curr_data").selectAll("p").
-    data(data).
-    enter().
-    append("p").
-    text(function(d) { 
-      console.log(d);
-      return d;
-    });
+  para = d3.selectAll("#curr_data")
+    .datum(data)
+    .append("p")
+      .text( function (d) { return "Temp: " + d.t_temp; })
+    .append("p")
+      .text( function (d) { return "Humidity: " + d.humidity; })
+    .append("p")
+      .text( function (d) { return "Light Level: " + d.light; })
+    .append("p")
+      .text( function (d) { return "Heater on: " + d.heat; })
+    .append("p")
+      .text( function (d) { return "Lights on: " + d.light_status; });
   })
 }
 
