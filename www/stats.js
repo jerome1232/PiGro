@@ -1,25 +1,22 @@
 // Read data
 var data = d3.json("data/sensor_data.json");
+const button = d3.selectAll('input[name="units"]');
 
+// load farenheit/celsius units from cache
 var unit = localStorage.getItem("temp_unit");
-if (unit == null) {
-  console.log("unit was ", unit);
-  // select Farenheit by default
-  d3.select('#farenheit').attr('checked', 'true');
-  d3.select('#celsius').attr('checked', null);
-  // store the value in localstorage
-  localStorage.setItem("temp_unit", 'true');
+
+// if it wasn't in cache, go farenheit by default
+if (unit === null) {
+  console.log("Unit was false, set to true", unit);
+  setRadio(unit);
 } else {
   // There's a value there,
   // check it and check the correct unit
-  console.log("Unit wasn't null");
+  unit = unit === 'true'; // converting string to boolean
   setRadio(unit);
 }
 
-const button = d3.selectAll('input[name="units"]');
-
 // Draw all dynamic elements
-console.log("units? ", button.property("checked"));
 draw_latest_data(data, button.property("checked"));
 draw_temp_graph(data, button.property("checked"));
 draw_light_graph(data);
@@ -29,7 +26,6 @@ draw_humidity_graph(data);
 // elements that involve temperature
 button.on('change', function(d) {
   var isTrue = (this.value === 'true');
-  console.log("button changed to ", isTrue);
   localStorage.setItem("temp_unit", isTrue);
   d3.select("#temp_graph").select("svg").remove();
   d3.select("#curr_data").selectAll("span").remove();
@@ -40,22 +36,18 @@ button.on('change', function(d) {
 })
 
 function setRadio(unit) {
-    if (unit === 'true') {
-      console.log('Unit was true', unit, 'checking farenheit');
+    if (unit) {
       // select Farenheit
       d3.select('#farenheit').attr('checked', 'true');
       d3.select('#celsius').attr('checked', null);
       // store the value in localstorage
-      console.log("storing in cache");
-      localStorage.setItem("temp_unit", 'true');
+      localStorage.setItem("temp_unit", true);
     } else {
-      console.log("unit was false", unit, "check celsius");
       // select celsius
       d3.select('#celsius').attr('checked', 'true');
       d3.select('#farenheit').attr('checked', null);
       // store value in localstroage
-      console.log("storing in cahce");
-      localStorage.setItem('temp_unit', 'false');
+      localStorage.setItem('temp_unit', false);
   }
 }
 
