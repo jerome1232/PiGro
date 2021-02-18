@@ -1,20 +1,65 @@
 // Read data
 var data = d3.json("data/sensor_data.json");
+
+var unit = localStorage.getItem("temp_unit");
+if (unit == null) {
+  console.log("unit was ", unit);
+  // select Farenheit by default
+  d3.select('#farenheit').attr('checked', 'true');
+  d3.select('#celsius').attr('checked', null);
+  // store the value in localstorage
+  localStorage.setItem("temp_unit", 'true');
+} else {
+  // There's a value there,
+  // check it and check the correct unit
+  console.log("Unit wasn't null");
+  setRadio(unit);
+}
+
 const button = d3.selectAll('input[name="units"]');
 
-draw_latest_data(data, button.property("value") == 'true');
-draw_temp_graph(data, button.property("value") == 'true');
+// Draw all dynamic elements
+console.log("units? ", button.property("checked"));
+draw_latest_data(data, button.property("checked"));
+draw_temp_graph(data, button.property("checked"));
 draw_light_graph(data);
 draw_humidity_graph(data);
 
+// When celsius/farenhiet are modifed, update the
+// elements that involve temperature
 button.on('change', function(d) {
+  var isTrue = (this.value === 'true');
+  console.log("button changed to ", isTrue);
+  localStorage.setItem("temp_unit", isTrue);
   d3.select("#temp_graph").select("svg").remove();
   d3.select("#curr_data").selectAll("span").remove();
-  var isTrue = (this.value === 'true');
+  d3.select("#curr_data").selectAll("svg").remove();
+  d3.select("#curr_data").selectAll("circle").remove();
   draw_temp_graph(data, isTrue);
   draw_latest_data(data, isTrue);
 })
 
+function setRadio(unit) {
+    if (unit === 'true') {
+      console.log('Unit was true', unit, 'checking farenheit');
+      // select Farenheit
+      d3.select('#farenheit').attr('checked', 'true');
+      d3.select('#celsius').attr('checked', null);
+      // store the value in localstorage
+      console.log("storing in cache");
+      localStorage.setItem("temp_unit", 'true');
+    } else {
+      console.log("unit was false", unit, "check celsius");
+      // select celsius
+      d3.select('#celsius').attr('checked', 'true');
+      d3.select('#farenheit').attr('checked', null);
+      // store value in localstroage
+      console.log("storing in cahce");
+      localStorage.setItem('temp_unit', 'false');
+  }
+}
+
+// Draw the current data element
 function draw_latest_data(data, isFarenheit) {
   data.then(function(data) {
     data.forEach(function(d) {
@@ -25,25 +70,64 @@ function draw_latest_data(data, isFarenheit) {
         d.t_temp = d.temp;
       }
     })
-  // geting the lastest data only
-  data = data[data.length - 1];
-  para = d3.selectAll("#curr_data")
-    .datum(data);
+    // geting the lastest data only
+    data = data[data.length - 1];
+    // Selecting desired div and binding data to it
+    para = d3.selectAll("#curr_data")
+      .datum(data);
 
-  // Append paragraphs
-  para.append("span")
-    .text( function (d) { return "Temp: " + d.t_temp + "\u00B0"; });
-  para.append("span")
-    .text( function (d) { return "Humidity: " + Math.round(d.humidity) + "%"; });
-  para.append("span")
-    .text( function (d) { return "Light Level: " + d.light; });
-  para.append("span")
-    .text( function (d) { return "Heater on: " + d.heat; });
-  para.append("span")
-    .text( function (d) { return "Lights on: " + d.light_status; });
+    // Append spans for each data item 
+    para.append("span")
+      .text( function (d) { return "Temp: " + d.t_temp + "\u00B0"; });
+    para.append("span")
+      .text( function (d) { 
+        return "Humidity: " + Math.round(d.humidity) + "%"; 
+      });
+    para.append("span")
+      .text( function (d) { return "Light Level: " + d.light; });
+
+    // For the heater / light status, I'm adding a green/red circle
+    // based on whether they are on or not.
+    div = para.append("span").attr("id", "heat");
+    div.append("span")
+      .text( function (d) { return "Heater "; });
+    div.append("svg")
+        .attr("width", 20)
+        .attr("height", 20)
+      .append("circle")
+        .attr("r", 10)
+        .attr("cx", 10)
+        .attr("cy", 10);
+    if (data.heat) {
+      div.select("svg").select("circle")
+        .attr("fill", "#879826");
+    } else {
+      div.select("svg").select("circle")
+        .attr("fill", "#E32C33");
+    }
+
+    // Doing the same thing as above but for lights
+    div = para.append("span").attr("id", "lights");
+    div.append("span")
+      .text( function (d) { return "Lights "; });
+    div.append("svg")
+        .attr("width", 20)
+        .attr("height", 20)
+      .append("circle")
+        .attr("r", 10)
+        .attr("cx", 10)
+        .attr("cy", 10);
+    if (data.light_status) {
+      div.select("svg").select("circle")
+        .attr("fill", "#879826");
+    } else {
+      div.select("svg").select("circle")
+        .attr("fill", "#E32C33");
+    }
   })
 }
 
+// draw the temperature over time graph
 function draw_temp_graph(data, isFarenheit) {
   data.then(function(data) {
     data.forEach(function(d) {
@@ -131,6 +215,7 @@ function draw_temp_graph(data, isFarenheit) {
   })
 }
 
+// Draw the light over time graph
 function draw_light_graph(data) {
   data.then(function(data) {
     data.forEach(function(d) {
@@ -213,6 +298,7 @@ function draw_light_graph(data) {
   })
 }
 
+// Draw the humidity over time graph
 function draw_humidity_graph(data) {
   data.then(function(data) {
     data.forEach(function(d) {
