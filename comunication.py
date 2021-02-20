@@ -15,18 +15,27 @@ heat = None
 light_status = None
 
 while True:
+	# sleep to give the processor some time
+	# to do other tasks.
 	time.sleep(.2)
+	# Read data from serial line
 	data = uno.read()
+	# key : value pairs are split by commas, this splits the string
+	# into an array of strings that each holds a key : value pair
 	split_data = data.split(',')
+
+	# Create a unix time stamp. This produces an epoch in seconds as a floating
+	# point.
 	time_stamp = time.time()
 
-
+	# looping through the key : value pairs
 	for item in split_data:
+		# splitting the key from the value
 		tmp = item.split(':')
-		if len(tmp) != 2:
+		if len(tmp) != 2:		# Checking that we have both a key, and a value
 			print('Malformed data')
 			break
-		print(tmp[0], tmp[1])
+		# assigning appropriate keys found to their respective variables.
 		if tmp[0] == 'light':
 			light = tmp[1]
 		elif tmp[0] == 'temp':
@@ -37,8 +46,9 @@ while True:
 			heat = True if int(tmp[1]) == 1 else False
 		elif tmp[0] == 'light_status':
 			light_status = True if int(tmp[1]) == 1 else False
-			print("Debug: light: ", light_status, tmp[1], type(tmp[1]))
 
+	# will convert this all to logging soon, here for troubleshooting
+	# purposes.
 	print('Time:',
 		datetime.datetime.fromtimestamp(time_stamp).strftime(
 		'%Y-%m-%d %I:%M:%S.%f %p'
@@ -51,6 +61,10 @@ while True:
 	print('Lights on?: ', light_status)
 	print()
 
+	# this loops through a list of expected keys, and creates a dictionary
+	# by assigning the string in the list as a key, and eval actually gets
+	# the variable name which is intentionally the same as the key and evalutes
+	# it to get the data.
 	sensor_data = {}
 	for var in [
 			'time_stamp',
@@ -62,6 +76,7 @@ while True:
 		]:
 		sensor_data[var] = eval(var)
 
+	# Saving data to JSON
 	file_path = '/home/pi/PiGro/www/data/sensor_data.json'
 
 	if os.path.isfile(file_path):
