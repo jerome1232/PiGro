@@ -1,4 +1,4 @@
-
+#include "Arduino.h"
 #include <DHT.h>
 
 #define  DHT_PIN                 8
@@ -14,7 +14,28 @@
 #define  HEATER_PIN              9
 
 DHT dht(DHT_PIN, DHT_TYPE);
-//dht.begin();
+
+void setup() {
+  // Begin serial communication at
+  // baud rate of 9600
+  Serial.begin(9600);
+  // Set pins as OUTPUT
+  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(LED_STRIP_PIN, OUTPUT);
+  pinMode(WATER_PUMP_PIN, OUTPUT);
+  pinMode(VALVE_01, OUTPUT);
+  pinMode(VALVE_02, OUTPUT);
+  pinMode(VALVE_03, OUTPUT);
+  pinMode(HEATER_PIN, OUTPUT);
+
+  // Set pins as INPUT
+  pinMode(DHT_PIN, INPUT);
+  pinMode(LIGHT_SENSOR_PIN, INPUT);
+  pinMode(SOIL_MOISTURE01_PIN, INPUT);
+  pinMode(SOIL_MOISTURE02_PIN, INPUT);
+
+  delay(1000);
+}
 
 // checkTempHumid
 // checks a DHT11 sensor and puts
