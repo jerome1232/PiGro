@@ -13,6 +13,8 @@ humidity = None
 time_stamp = None
 heat = None
 light_status = None
+soil_moisture_1 = None
+soil_moisture_2 = None
 
 while True:
 	# sleep to give the processor some time
@@ -46,6 +48,10 @@ while True:
 			heat = True if int(tmp[1]) == 1 else False
 		elif tmp[0] == 'light_status':
 			light_status = True if int(tmp[1]) == 1 else False
+		elif tmp[0] == 'soil_moisture_1':
+			soil_moisture_1 = tmp[1]
+		elif tmp[0] == 'soil_moisture_2':
+			soil_moisture_2 = tmp[1]
 
 	# will convert this all to logging soon, here for troubleshooting
 	# purposes.
@@ -72,7 +78,9 @@ while True:
 			'humidity',
 			'light',
 			'heat',
-			'light_status'
+			'light_status',
+			'soil_moisture_1',
+			'soil_moisture_2'
 		]:
 		sensor_data[var] = eval(var)
 
