@@ -45,6 +45,8 @@ void loop() {
 
 
   // Write data to serial line
+  // I feel like I should be able to do this with a simple
+  // loop, but I'm not sure how yet.
   Serial.print('<');
   Serial.print("light:");
   Serial.print(sensor_data.lightLevel);
