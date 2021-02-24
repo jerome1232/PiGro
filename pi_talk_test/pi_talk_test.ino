@@ -1,13 +1,7 @@
 #include "Arduino.h"
 #include "greenhouse.h"
-#include <DHT.h>
 
-int temp_low_thresh = 26;  // low thresh at which heater kicks on
-int temp_high_thresh = 0;  // high thresh at which heater kicks off
-int thresh_humidity = 0;  // point at which to humidify the air
-int thresh_light = 500;   // thresh at which to turn on lights
 int sleep_delay = 300000;        // miliseconds to wait for next loop
-
 
 Greenhouse greenhouse = Greenhouse();
 
