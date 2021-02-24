@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>PiGro</title>
+    <link rel="stylesheet" href="default.css"/>
+    <link rel="stylesheet" href="control.css"/>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="stats.html">Graphs</a></li>
+        <li class="active"><a href="control.html">Control</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </nav>
+    <main>
+        <form action="cgi/test.py" method="post">
+          <div class="form">
+            Low Temperature: <input type="number" name="low_temp"/>
+          </div>
+          <div class="form">
+            High Temperature: <input type="number" name="high_temp"/>
+          </div>
+          <div class="form">
+            Low Humidity: <input type="number" name="low_humidity"/>
+          </div>
+          <div class="form">
+            Light Level: <input type="number" name="light_thresh"/>
+          </div>
+        </form>
+    </main>
+  </body>
+</html>
