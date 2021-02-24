@@ -20,7 +20,6 @@ Greenhouse::Greenhouse():_dht(DHT_PIN, DHT_TYPE) {
   _temp_high = 33;
   _humidity_low = 80;
   _light_thresh = 400;
-  _dht = DHT(DHT_PIN, DHT_TYPE);
 }
 
 Greenhouse::Greenhouse(int temp_low, int temp_high,
@@ -30,7 +29,8 @@ Greenhouse::Greenhouse(int temp_low, int temp_high,
   _temp_high = temp_high;
   _humidity_low = humidity_low;
   _light_thresh = light_thresh;
-  _dht = DHT(DHT_PIN, DHT_TYPE);
+  _is_light_on = false;
+  _is_heater_on = false;
 }
 
 void Greenhouse::begin() {
@@ -52,14 +52,13 @@ void Greenhouse::begin() {
   pinMode(SOIL_MOISTURE01_PIN, INPUT);
   pinMode(SOIL_MOISTURE02_PIN, INPUT);
 
-  _is_light_on = false;
-  _is_heater_on = false;
 }
 
 void Greenhouse::run_tasks() {
   operate_water();
   operate_light();
   operate_water();
+  operate_heat();
 }
 
 void Greenhouse::run_sensor_check() {
