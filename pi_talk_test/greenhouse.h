@@ -4,7 +4,6 @@
 #include <DHT.h>
 
 class Greenhouse {
-    DHT _dht;
     public:
         Greenhouse();
         Greenhouse(
@@ -34,6 +33,7 @@ class Greenhouse {
         int _temp_high;
         int _humidity_low;
         int _light_thresh;
+        DHT _dht;
 
         float check_temp();
         float check_humidity();
