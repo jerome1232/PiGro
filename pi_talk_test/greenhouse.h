@@ -27,6 +27,7 @@ class Greenhouse {
         int get_soil_moisture_1();
         int get_soil_moisture_2();
     private:
+        // Sensor related data
         float _temp;
         float _humidity;
         int _light_level;
@@ -34,7 +35,7 @@ class Greenhouse {
         int _soil_moisture_2;
         bool _is_light_on;
         bool _is_heater_on;
-
+        // threshold related data
         int _temp_low;
         int _temp_high;
         int _humidity_low;
