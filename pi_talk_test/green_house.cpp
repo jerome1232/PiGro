@@ -14,27 +14,28 @@
 #define  SOIL_MOISTURE02_PIN     A2
 #define  HEATER_PIN              9
 
-
+/**
+ * Default constructor
+ * Sets all thresholds to default values
+ */
 Greenhouse::Greenhouse():_dht(DHT_PIN, DHT_TYPE) {
   _temp_low = 26;
   _temp_high = 33;
   _humidity_low = 80;
-  _light_thresh = 400;
-}
-
-Greenhouse::Greenhouse(int temp_low, int temp_high,
-                       int humidity_low, int light_thresh
-                      ):_dht(DHT_PIN, DHT_TYPE) {
-  _temp_low = temp_low;
-  _temp_high = temp_high;
-  _humidity_low = humidity_low;
-  _light_thresh = light_thresh;
+  _light_thresh = 300;
+  _soil_moisture_1_thresh = 400;
+  _soil_moisture_2_thresh = 400;
   _is_light_on = false;
   _is_heater_on = false;
 }
 
+/**
+ * Set's all pins to output/input
+ * and runs inital startup for dht11 sensor
+ */
 void Greenhouse::begin() {
 
+  // Startup for DHT11 sensor
   _dht.begin();
 
   // Set pins as OUTPUT
@@ -51,9 +52,12 @@ void Greenhouse::begin() {
   pinMode(LIGHT_SENSOR_PIN, INPUT);
   pinMode(SOIL_MOISTURE01_PIN, INPUT);
   pinMode(SOIL_MOISTURE02_PIN, INPUT);
-
 }
 
+/**
+ * Runs all grenhouse tasks, such as heating
+ * light operation, watering and heating.
+ */
 void Greenhouse::run_tasks() {
   operate_water();
   operate_light();
@@ -61,6 +65,9 @@ void Greenhouse::run_tasks() {
   operate_heat();
 }
 
+/**
+ * Checks all sensors and stores the result
+ */
 void Greenhouse::run_sensor_check() {
   _temp = check_temp();
   _humidity = check_humidity();
@@ -97,6 +104,30 @@ int Greenhouse::get_soil_moisture_2() {
   return _soil_moisture_2;
 }
 
+int Greenhouse::get_temp_low() {
+  return _temp_low;
+}
+
+int Greenhouse::get_temp_high() {
+  return _temp_high;
+}
+
+int Greenhouse::get_humidity_low() {
+  return _humidity_low;
+}
+
+int Greenhouse::get_light_thresh() {
+  return _light_thresh;
+}
+
+int Greenhouse::get_soil_moisture_1_thresh() {
+  return _soil_moisture_1_thresh;
+}
+
+int Greenhouse::get_soil_moisture_2_thresh() {
+  return _soil_moisture_2_thresh;
+}
+
 float Greenhouse::check_temp() {
   return _dht.readTemperature();
 }
@@ -109,14 +140,6 @@ int Greenhouse::check_light_level() {
   return analogRead(LIGHT_SENSOR_PIN);
 }
 
-void Greenhouse::water_pump_on_off(bool on_off) {
-  if (on_off) {
-    digitalWrite(WATER_PUMP_PIN, HIGH);
-  } else {
-    digitalWrite(WATER_PUMP_PIN, LOW);
-  }
-}
-
 int Greenhouse::check_soil_moisture_1() {
   return analogRead(SOIL_MOISTURE01_PIN);
  }
@@ -125,42 +148,100 @@ int Greenhouse::check_soil_moisture_2() {
   return analogRead(SOIL_MOISTURE02_PIN);
 }
 
-void Greenhouse::lights_on_off(bool on_off) {
-  _is_light_on = on_off;
-  if (on_off) {
+void Greenhouse::lights_on(bool on) {
+  _is_light_on = on;
+  if (on) {
     digitalWrite(LED_STRIP_PIN, HIGH);
   } else {
     digitalWrite(LED_STRIP_PIN, LOW);
   }
 }
 
-void Greenhouse::heater_on_off(bool on_off) {
-  _is_heater_on = on_off;
-  if (on_off) {
+void Greenhouse::water_pump_on(bool on) {
+  if (on) {
+    digitalWrite(WATER_PUMP_PIN, HIGH);
+  } else {
+    digitalWrite(WATER_PUMP_PIN, LOW);
+  }
+}
+
+void Greenhouse::heater_on(bool on) {
+  _is_heater_on = on;
+  if (on) {
     digitalWrite(HEATER_PIN, HIGH);
   } else {
     digitalWrite(HEATER_PIN, LOW);
   }
 }
 
+void Greenhouse::valve_1_on(bool on) {
+  if (on) {
+    digitalWrite(VALVE_01, HIGH);
+  } else {
+    digitalWrite(VALVE_01, LOW);
+  }
+}
+
+void Greenhouse::valve_2_on(bool on) {
+  if (on) {
+    digitalWrite(VALVE_02, HIGH);
+  } else {
+    digitalWrite(VALVE_02, LOW);
+  }
+}
+
+void Greenhouse::valve_3_on(bool on) {
+  if (on) {
+    digitalWrite(VALVE_03, HIGH);
+  } else {
+    digitalWrite(VALVE_03, LOW);
+  }
+}
+
 void Greenhouse::operate_heat() {
   if (_temp < _temp_low) {
-    heater_on_off(true);
+    heater_on(true);
   }
   if (_temp > _temp_high) {
-    heater_on_off(false);
+    heater_on(false);
   }
 }
 
 void Greenhouse::operate_light() {
-  lights_on_off(false);
+  lights_on(false);
   delay(100);
 
   if (check_light_level() < _light_thresh) {
-    lights_on_off(true);
+    lights_on(true);
   }
 }
 
 void Greenhouse::operate_water() {
-  // dummy
+  bool will_water = false;
+  if (_humidity < _humidity_low ||
+      _soil_moisture_1 < _soil_moisture_1_thresh ||
+      _soil_moisture_2 < _soil_moisture_2_thresh) {
+    will_water = true;
+    // prime the water pressure
+    water_pump_on(true);
+    delay(5000);
+  }
+  if (_soil_moisture_1 < _soil_moisture_1_thresh) {
+    valve_1_on(true);
+  }
+  if (_soil_moisture_2 < _soil_moisture_2_thresh) {
+    valve_3_on(true);
+  }
+  if (_humidity < _humidity_low) {
+    valve_2_on(true);
+  }
+
+  // run water for a minute
+  if (will_water) {
+    delay(60000);
+    water_pump_on(false);
+    valve_1_on(false);
+    valve_2_on(false);
+    valve_3_on(false);
+  }
 }

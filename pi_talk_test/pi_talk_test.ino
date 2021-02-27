@@ -1,7 +1,8 @@
 #include "Arduino.h"
 #include "greenhouse.h"
 
-int sleep_delay = 300000;        // miliseconds to wait for next loop
+int sleep_delay = 300000;
+// int sleep_delay = 900000;           // Wait 15 minutes for next check
 
 Greenhouse greenhouse = Greenhouse();
 

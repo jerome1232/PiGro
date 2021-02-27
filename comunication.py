@@ -26,8 +26,9 @@ while True:
 	# to do other tasks.
 	time.sleep(.2)
 	# Read data from serial line
+	logging.info("Waiting for serial communication")
 	data = uno.read()
-	logging.info("read data from uno: ", data)
+	logging.info("read data from uno: " + data)
 	# key : value pairs are split by commas, this splits the string
 	# into an array of strings that each holds a key : value pair
 	split_data = data.split(',')
@@ -49,24 +50,9 @@ while True:
 			sensor_data[tmp[0]] = tmp[1]
 			logging.info("values: %s, %s", tmp[0], tmp[1])
 
-		# Changing ints to bools
-		sensor_data['heat'] = bool(sensor_data['heat'])
-		sensor_data['light_status'] = bool(sensor_data['light_status'])
-
-	# will convert this all to logging soon, here for troubleshooting
-	# purposes.
-	print('Time:',
-		datetime.datetime.fromtimestamp(sensor_data['time_stamp']).strftime(
-		'%Y-%m-%d %I:%M:%S.%f %p'
-		)
-	)
-	for item in sensor_data.keys():
-		logging.info("%s, %s", item, sensor_data[item])
-
-	# this loops through a list of expected keys, and creates a dictionary
-	# by assigning the string in the list as a key, and eval actually gets
-	# the variable name which is intentionally the same as the key and evalutes
-	# it to get the data.
+	# Changing ints to bools
+	sensor_data['heat'] = bool(int(sensor_data['heat']))
+	sensor_data['light_status'] = bool(int(sensor_data['light_status']))
 
 	# Saving data to JSON
 	file_path = '/home/pi/PiGro/www/data/sensor_data.json'
