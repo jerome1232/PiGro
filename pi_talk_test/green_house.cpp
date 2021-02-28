@@ -23,8 +23,8 @@ Greenhouse::Greenhouse():_dht(DHT_PIN, DHT_TYPE) {
   _temp_high = 33;
   _humidity_low = 80;
   _light_thresh = 300;
-  _soil_moisture_1_thresh = 400;
-  _soil_moisture_2_thresh = 400;
+  _soil_moisture_1_thresh = 800;
+  _soil_moisture_2_thresh = 800;
   _is_light_on = false;
   _is_heater_on = false;
 }
@@ -218,30 +218,29 @@ void Greenhouse::operate_light() {
 
 void Greenhouse::operate_water() {
   bool will_water = false;
-  if (_humidity < _humidity_low ||
-      _soil_moisture_1 < _soil_moisture_1_thresh ||
-      _soil_moisture_2 < _soil_moisture_2_thresh) {
+  if (_soil_moisture_1 > _soil_moisture_1_thresh ||
+      _soil_moisture_2 > _soil_moisture_2_thresh) {
     will_water = true;
     // prime the water pressure
     water_pump_on(true);
     delay(5000);
   }
-  if (_soil_moisture_1 < _soil_moisture_1_thresh) {
+  if (_soil_moisture_1 > _soil_moisture_1_thresh) {
     valve_1_on(true);
   }
-  if (_soil_moisture_2 < _soil_moisture_2_thresh) {
+  if (_soil_moisture_2 > _soil_moisture_2_thresh) {
     valve_3_on(true);
   }
-  if (_humidity < _humidity_low) {
-    valve_2_on(true);
-  }
+  // if (_humidity < _humidity_low) {
+  //   valve_2_on(true);
+  // }
 
   // run water for a minute
   if (will_water) {
-    delay(60000);
-    water_pump_on(false);
-    valve_1_on(false);
-    valve_2_on(false);
-    valve_3_on(false);
+    delay(30000);
   }
+  water_pump_on(false);
+  valve_1_on(false);
+  valve_2_on(false);
+  valve_3_on(false);
 }

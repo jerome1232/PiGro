@@ -24,7 +24,7 @@ sensor_data = {
 while True:
 	# sleep to give the processor some time
 	# to do other tasks.
-	time.sleep(.2)
+	time.sleep(.1)
 	# Read data from serial line
 	logging.info("Waiting for serial communication")
 	data = uno.read()
@@ -36,6 +36,7 @@ while True:
 	# Create a unix time stamp. This produces an epoch in seconds as a floating
 	# point.
 	sensor_data['time_stamp'] = time.time()
+	logging.info("%s", datetime.datetime.fromtimestamp(sensor_data['time_stamp']))
 
 	# looping through the key : value pairs
 	for item in split_data:
