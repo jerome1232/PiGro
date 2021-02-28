@@ -1,7 +1,6 @@
 #include "Arduino.h"
 #include "greenhouse.h"
 
-int sleep_delay = 300000;
 // int sleep_delay = 900000;           // Wait 15 minutes for next check
 
 Greenhouse greenhouse = Greenhouse();
@@ -15,16 +14,17 @@ void setup() {
 }
 
 void loop() {
+  unsigned long sleep_delay = 300000UL;
   // Initialize variables
-  String data = "";
+  // String data = "";
 
   // Light up built-in LED while running sensor check
   digitalWrite(LED_BUILTIN, HIGH);
 
   // Read in any available threshold settings.
-  if (Serial.available() > 0) {
-    data = Serial.readStringUntil('>');
-  }
+  // if (Serial.available() > 0) {
+  //   data = Serial.readStringUntil('>');
+  // }
 
   greenhouse.run_sensor_check();
   greenhouse.run_tasks();
@@ -57,7 +57,6 @@ void loop() {
 
   // Turn off built-in LED light before sleep
   digitalWrite(LED_BUILTIN, LOW);
-
-  // Sleep until next loop
   delay(sleep_delay);
+  // Sleep until next loop
 }
