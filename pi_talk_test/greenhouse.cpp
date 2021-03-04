@@ -1,27 +1,36 @@
+/**
+ * @file: greenhouse.cpp
+ * @author: Jeremy D. Jones
+ *
+ * The purpose of this file is to implement the Greenhouse class
+ * This allows for control of an automated greenhouse that can
+ * heat, water, and light itself based on various thresholds.
+ */
+
 #include "Arduino.h"
 #include <DHT.h>
 #include "greenhouse.h"
 
 
-/*******************************************************************************
+/*
  * Default constructor
  * Sets all thresholds to default values
- ******************************************************************************/
+ */
 Greenhouse::Greenhouse():_dht(DHT_PIN, DHT_TYPE) {
   _temp_low = 26;
   _temp_high = 33;
   _humidity_low = 80;
   _light_thresh = 300;
-  _soil_moisture_1_thresh = 800;
-  _soil_moisture_2_thresh = 800;
+  _soil_moisture_1_thresh = 700;
+  _soil_moisture_2_thresh = 700;
   _is_light_on = false;
   _is_heater_on = false;
 }
 
-/*******************************************************************************
+/*
  * Set's all pins to output/input
  * and runs inital startup for dht11 sensor
- ******************************************************************************/
+ */
 void Greenhouse::begin() {
   // Startup for DHT11 sensor
   _dht.begin();
@@ -42,10 +51,10 @@ void Greenhouse::begin() {
   pinMode(SOIL_MOISTURE02_PIN, INPUT);
 }
 
-/*******************************************************************************
+/*
  * Runs all grenhouse tasks, such as heating
  * light operation, watering and heating.
- ******************************************************************************/
+ */
 void Greenhouse::run_tasks() {
   operate_water();
   operate_light();
@@ -53,9 +62,9 @@ void Greenhouse::run_tasks() {
   operate_heat();
 }
 
-/*******************************************************************************
+/*
  * Checks soil moisture for the bay passed as an int.
- ******************************************************************************/
+ */
 int Greenhouse::check_soil_moisture(int bay) {
   int reading = -1;
   switch (bay) {
@@ -67,9 +76,9 @@ int Greenhouse::check_soil_moisture(int bay) {
   return reading;
 }
 
-/*******************************************************************************
+/*
  * Checks all sensors and stores the result
- ******************************************************************************/
+ */
 void Greenhouse::run_sensor_check() {
   _temp = check_temp();
   _humidity = check_humidity();
@@ -78,9 +87,9 @@ void Greenhouse::run_sensor_check() {
   _soil_moisture_2 = check_soil_moisture(2);
 }
 
-/*******************************************************************************
+/*
  * Turns led strip on/off
- ******************************************************************************/
+ */
 void Greenhouse::lights_on(bool on) {
   _is_light_on = on;
   if (on) {
@@ -90,9 +99,9 @@ void Greenhouse::lights_on(bool on) {
   }
 }
 
-/*******************************************************************************
+/*
  * Turns water pump on/off
- ******************************************************************************/
+ */
 void Greenhouse::water_pump_on(bool on) {
   if (on) {
     digitalWrite(WATER_PUMP_PIN, HIGH);
@@ -101,9 +110,9 @@ void Greenhouse::water_pump_on(bool on) {
   }
 }
 
-/*******************************************************************************
+/*
  * Turns heater on/off
- ******************************************************************************/
+ */
 void Greenhouse::heater_on(bool on) {
   _is_heater_on = on;
   if (on) {
@@ -113,9 +122,9 @@ void Greenhouse::heater_on(bool on) {
   }
 }
 
-/*******************************************************************************
+/*
  * Turns valve_1 on/off
- ******************************************************************************/
+ */
 void Greenhouse::valve_1_on(bool on) {
   if (on) {
     digitalWrite(VALVE_01, HIGH);
@@ -124,9 +133,9 @@ void Greenhouse::valve_1_on(bool on) {
   }
 }
 
-/*******************************************************************************
+/*
  * Turns valve_2 on/off
- ******************************************************************************/
+ */
 void Greenhouse::valve_2_on(bool on) {
   if (on) {
     digitalWrite(VALVE_02, HIGH);
@@ -135,9 +144,9 @@ void Greenhouse::valve_2_on(bool on) {
   }
 }
 
-/*******************************************************************************
+/*
  * Turns valve_3 on/off
- ******************************************************************************/
+ */
 void Greenhouse::valve_3_on(bool on) {
   if (on) {
     digitalWrite(VALVE_03, HIGH);
@@ -147,9 +156,9 @@ void Greenhouse::valve_3_on(bool on) {
 }
 
 
-/*******************************************************************************
+/*
  * Turns the heater on/off based on temp threshold data
- ******************************************************************************/
+ */
 void Greenhouse::operate_heat() {
   if (_temp < _temp_low) {
     heater_on(true);
@@ -159,9 +168,9 @@ void Greenhouse::operate_heat() {
   }
 }
 
-/*******************************************************************************
+/*
  * Turns the lights on/off based on light threshold data
- ******************************************************************************/
+ */
 void Greenhouse::operate_light() {
   lights_on(false);
   delay(100);
@@ -171,12 +180,12 @@ void Greenhouse::operate_light() {
   }
 }
 
-/*******************************************************************************
+/*
  * Waters planters based on soil moisture data.
  * Note: This will temporarily turn heating off to avoid overstressing
  *       power supply.
  * Also sprays a mister to humidify the air if the air has low relative humidity
- ******************************************************************************/
+ */
 void Greenhouse::operate_water() {
   bool will_water = false;
   bool heat = _is_heater_on;
@@ -201,7 +210,7 @@ void Greenhouse::operate_water() {
 
   // run water for 30 seconds
   if (will_water) {
-    delay(30000);
+    delay(60000);
   }
 
   water_pump_on(false);
