@@ -8,7 +8,6 @@
  */
 
 #include "Arduino.h"
-#include <DHT.h>
 #include "greenhouse.h"
 
 
@@ -19,7 +18,7 @@
 Greenhouse::Greenhouse():_dht(DHT_PIN, DHT_TYPE) {
   _temp_low = 26;
   _temp_high = 33;
-  _humidity_low = 80;
+  _humidity_low = 30;
   _light_thresh = 300;
   _soil_moisture_1_thresh = 700;
   _soil_moisture_2_thresh = 700;
@@ -189,33 +188,42 @@ void Greenhouse::operate_light() {
 void Greenhouse::operate_water() {
   bool will_water = false;
   bool heat = _is_heater_on;
-  if (_soil_moisture_1 > _soil_moisture_1_thresh ||
+
+  if (_humidity < _humidity_low ||
+    _soil_moisture_1 > _soil_moisture_1_thresh ||
       _soil_moisture_2 > _soil_moisture_2_thresh) {
     will_water = true;
     // Turn off the heater to avoid maxing out the power supply
     if (heat) { heater_on(false); }
     // prime the water pressure
     water_pump_on(true);
-    delay(5000);
+    delay(1000);
   }
+  // do humidity mister separately
+  if (_humidity < _humidity_low) {
+    valve_2_on(true);
+    delay(30000)
+    valve_2_on(false);
+  }
+  // turn on watering valves
   if (_soil_moisture_1 > _soil_moisture_1_thresh) {
     valve_1_on(true);
   }
   if (_soil_moisture_2 > _soil_moisture_2_thresh) {
     valve_3_on(true);
   }
-  // if (_humidity < _humidity_low) {
-  //   valve_2_on(true);
-  // }
 
-  // run water for 30 seconds
+  // run water for 2.5 minutes
   if (will_water) {
-    delay(60000);
+    delay(150000);
   }
 
+  // turn everything off
   water_pump_on(false);
   valve_1_on(false);
   valve_2_on(false);
   valve_3_on(false);
+
+  // turn the heater back on if it was on previously
   if (heat) { heater_on(true); }
 }

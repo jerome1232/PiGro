@@ -1,3 +1,5 @@
+#ifndef GREEN_HOUSE_H
+#define GREEN_HOUSE_H
 /**
  * @file: greenhouse.h
  * @author: Jeremy D. Jones
@@ -6,9 +8,6 @@
  * This allows for control of an automated greenhouse that can
  * heat, water, and light itself based on various thresholds.
  */
-
-#ifndef GREEN_HOUSE_H
-#define GREEN_HOUSE_H
 
 #include <DHT.h>
 
@@ -20,8 +19,8 @@
 #define  VALVE_02                5
 #define  VALVE_03                4
 #define  LIGHT_SENSOR_PIN        A0
-#define  SOIL_MOISTURE01_PIN     A2
-#define  SOIL_MOISTURE02_PIN     A1
+#define  SOIL_MOISTURE01_PIN     A1
+#define  SOIL_MOISTURE02_PIN     A2
 #define  HEATER_PIN              9
 
 class Greenhouse {
