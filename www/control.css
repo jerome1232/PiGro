@@ -1,22 +1,27 @@
 main {
-  margin: 5em auto;
-  padding: 5em 20% 20% 10%;
+  margin: 0 5em;
+  padding: .5em 5em 5em .5em;
   justify-content: center;
+}
+
+h1 {
+    text-align: center;
 }
 
 #form {
   box-shadow: 0.4em 0.4em 0.2em;
-  margin: 0.2em auto;
+  margin: 0 auto;
   background-color: #edebd4;
   padding: 0.5em;
   border-radius: 25px;
   width: auto;
+  justify-content: center;
 }
 
 .form {
     display: grid;
     grid-template-columns: 0.3fr 0.5fr;
-    margin: 0.2em;
+    margin: 0.2em auto;
     padding: 0.2em;
     text-align: right;
 }
