@@ -21,30 +21,79 @@
         <form action="cgi/test.py" method="post">
           <div class="form">
             <span class="label">Low Temperature</span>
-            <input type="number" name="low_temp"/>
+            <input type="text"
+                   name="low_temp"
+                   pattern="^\d{1,2}[cf]$"
+                   title="Please enter up to a two digit number followed
+                          by either 'f' or 'c' for fahrenheit or celsius"
+                   placeholder="75f"
+            />
           </div>
           <div class="form">
             <span class="label">High Temperature</span>
-            <input type="number" name="high_temp"/>
+            <input type="text"
+                   name="high_temp"
+                   pattern="^/d{1,2}[cf]$"
+                   title="Please enter up to a two digit number followed
+                          by either 'f' or 'c' for fahrenheit or celsius"
+                   placeholder="40f"
+            />
           </div>
           <div class="form">
             <span class="label">Low Humidity</span>
-            <input type="number" name="low_humidity"/>
+            <input type="text"
+                   name="low_humidity"
+                   pattern="^/d{1,2}%$"
+                   title="Please enter minimum relative Humidity as a
+                          percent"
+                   placeholder="50%"
+            />
           </div>
           <div class="form">
             <span class="label">Light Level</span>
-            <input type="number" name="light_thresh"/>
+            <input type="number"
+                   name="light_thresh"
+                   title="Please enter light level at which to turn on
+                          lights, broad daylight is around 900, a cloudy day
+                          or indirect light is around 600. Total darkness is 0."
+                   placeholder="400"
+                   min=0
+                   max=1023
+            />
           </div>
           <div class="form">
             <span class="label">Watering time</span>
-            <input type="number" name="water_time"/>
+            <input type="text"
+                   name="water_time"
+                   title="Please enter the amount of time to water for followed
+                          by an &quotes & quote for seconds or &quote m &quote for
+                          minutes."
+                   placeholder="3m"
+                   pattern="^/d{1,2}[ms]$"
+            />
+          </div>
+          <div class="form">
+            <span class="label">Watering threshold</span>
+            <input type="text"
+                   name="water_thresh"
+                   title="Please enter the threshold at which to water as a
+                          percent"
+                   placeholder="30%"
+                   pattern="^/d{1,2}%$"
+            />
           </div>
           <div class="form">
             <span class="label">Sensor Check interval</span>
-            <input type="number" name="sleep_time"/>
+            <input type="number"
+                   name="sleep_time"
+                   title="Please enter the amount of time to allow between
+                          sensor checks in minutes"
+                   min=0
+            />
           </div>
-          <div class="form" id="submit">
-            <input type="submit"/>
+          <div class="form" id="btns">
+              <input type="reset" id="reset"/>
+              <input type="submit" id="submit"/>
           </div>
         </form>
         </div> <!-- form -->

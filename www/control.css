@@ -6,15 +6,16 @@ main {
 
 #form {
   box-shadow: 0.4em 0.4em 0.2em;
-  margin: 1em auto;
+  margin: 0.2em auto;
   background-color: #edebd4;
   padding: 0.5em;
   border-radius: 25px;
+  width: auto;
 }
 
 .form {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 0.3fr 0.5fr;
     margin: 0.2em;
     padding: 0.2em;
     text-align: right;
@@ -22,6 +23,7 @@ main {
 
 input {
     border-radius: 25px;
+    text-align: center;
 }
 
 .label {
@@ -32,8 +34,14 @@ input {
     content: ":"
 }
 
-#submit>input {
+#submit{
     background-color: #879826;
     color: #003641;
-    grid-column: 2;
+    display: inline;
+}
+
+#reset{
+    background-color: #D14821;
+    color: #003641;
+    display: inline;
 }
