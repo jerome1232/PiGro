@@ -202,7 +202,7 @@ void Greenhouse::operate_water() {
   // do humidity mister separately
   if (_humidity < _humidity_low) {
     valve_2_on(true);
-    delay(30000)
+    delay(30000);
     valve_2_on(false);
   }
   // turn on watering valves

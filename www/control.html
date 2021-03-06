@@ -17,20 +17,37 @@
       </ul>
     </nav>
     <main>
+      <div id="form">
         <form action="cgi/test.py" method="post">
           <div class="form">
-            Low Temperature: <input type="number" name="low_temp"/>
+            <span class="label">Low Temperature</span>
+            <input type="number" name="low_temp"/>
           </div>
           <div class="form">
-            High Temperature: <input type="number" name="high_temp"/>
+            <span class="label">High Temperature</span>
+            <input type="number" name="high_temp"/>
           </div>
           <div class="form">
-            Low Humidity: <input type="number" name="low_humidity"/>
+            <span class="label">Low Humidity</span>
+            <input type="number" name="low_humidity"/>
           </div>
           <div class="form">
-            Light Level: <input type="number" name="light_thresh"/>
+            <span class="label">Light Level</span>
+            <input type="number" name="light_thresh"/>
+          </div>
+          <div class="form">
+            <span class="label">Watering time</span>
+            <input type="number" name="water_time"/>
+          </div>
+          <div class="form">
+            <span class="label">Sensor Check interval</span>
+            <input type="number" name="sleep_time"/>
+          </div>
+          <div class="form" id="submit">
+            <input type="submit"/>
           </div>
         </form>
+        </div> <!-- form -->
     </main>
   </body>
 </html>

@@ -1,5 +1,39 @@
 main {
-    margin: 5em auto;
-    padding: 5em 20% 20% 10%;
-    justify-content: center;
+  margin: 5em auto;
+  padding: 5em 20% 20% 10%;
+  justify-content: center;
+}
+
+#form {
+  box-shadow: 0.4em 0.4em 0.2em;
+  margin: 1em auto;
+  background-color: #edebd4;
+  padding: 0.5em;
+  border-radius: 25px;
+}
+
+.form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0.2em;
+    padding: 0.2em;
+    text-align: right;
+}
+
+input {
+    border-radius: 25px;
+}
+
+.label {
+    padding-right: 0.3em;
+}
+
+.label:after {
+    content: ":"
+}
+
+#submit>input {
+    background-color: #879826;
+    color: #003641;
+    grid-column: 2;
 }
