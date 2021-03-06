@@ -146,3 +146,4 @@ www/data/sensor_data.json
 
 # VS Code workspace
 *.code-workspace
+.vscode

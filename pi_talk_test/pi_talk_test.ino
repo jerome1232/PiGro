@@ -14,7 +14,7 @@ void setup() {
 }
 
 void loop() {
-  unsigned long sleep_delay = 300000UL;
+  unsigned long sleep_delay = 300000UL;   // sleep for 5 minutes
   // Initialize variables
   // String data = "";
 
