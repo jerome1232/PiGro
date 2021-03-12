@@ -26,6 +26,8 @@ for key in form.keys():
       item = item.rstrip(item[-1])
    elif last_char == 'm':
       item = int(item.rstrip(item[-1])) * 60_000
+   elif key == 'sleep_time':
+      item = int(item) * 60_000
 
    data[key] = item
 

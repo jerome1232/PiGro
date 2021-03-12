@@ -4,6 +4,7 @@
 // int sleep_delay = 900000;           // Wait 15 minutes for next check
 
 Greenhouse greenhouse = Greenhouse();
+unsigned long sleep_delay = 300000UL;   // sleep for 5 minutes
 
 void setup() {
   // Begin serial communication at
@@ -14,17 +15,25 @@ void setup() {
 }
 
 void loop() {
-  unsigned long sleep_delay = 300000UL;   // sleep for 5 minutes
-  // Initialize variables
-  // String data = "";
 
   // Light up built-in LED while running sensor check
   digitalWrite(LED_BUILTIN, HIGH);
 
   // Read in any available threshold settings.
-  // if (Serial.available() > 0) {
-  //   data = Serial.readStringUntil('>');
-  // }
+  while (Serial.available() > 0) {
+    String key = Serial.readStringUntil(':');
+    String value = Serial.readStringUntil(',');
+    if (key == "low_temp") { greenhouse.set_temp_low(value.toFloat()); }
+    else if (key == "high_temp") { greenhouse.set_temp_high(value.toFloat()); }
+    else if (key == "low_humidity") { greenhouse.set_humidity_low(value.toInt()); }
+    else if (key == "sleep_time") { sleep_delay = value.toInt(); }
+    else if (key == "water_time") { greenhouse.set_water_time(value.toInt()); }
+    else if (key == "water_thresh") {
+      greenhouse.set_soil_moisture_1_thresh(value.toInt());
+      greenhouse.set_soil_moisture_2_thresh(value.toInt());
+    }
+    else if (key == "light_thresh") { greenhouse.set_light_thresh(value.toInt()); }
+  }
 
   greenhouse.run_sensor_check();
   greenhouse.run_tasks();

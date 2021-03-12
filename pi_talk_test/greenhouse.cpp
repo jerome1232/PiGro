@@ -221,7 +221,7 @@ void Greenhouse::operate_water() {
 
   // run water for 2.5 minutes
   if (will_water) {
-    delay(60000);
+    delay(_water_time);
   }
 
   // turn everything off

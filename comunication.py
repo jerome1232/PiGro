@@ -47,6 +47,7 @@ while True:
 	else:
 		logging.info("Data Received: " + data)
 		# Writing data to uno
+		data = data + ','
 		uno.write(data)
 
 	# Read data from serial line

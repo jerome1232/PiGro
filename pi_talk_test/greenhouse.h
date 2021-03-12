@@ -61,12 +61,13 @@ class Greenhouse {
         int get_soil_moisture_2_thresh() { return _soil_moisture_2_thresh; }
 
         // setters
-        void set_temp_low(int);
-        void set_temp_high(int);
-        void set_humidity_low(int);
-        void set_light_thresh(int);
-        void set_soil_moisture_1_thresh(int);
-        void set_soil_moisture_2_thresh(int);
+        void set_temp_low(float temp_low) { _temp_low = temp_low; }
+        void set_temp_high(float temp_high) { _temp_high = temp_high; }
+        void set_humidity_low(int humidity_low) { _humidity_low = humidity_low; }
+        void set_light_thresh(int light_thresh) { _light_thresh = light_thresh; }
+        void set_soil_moisture_1_thresh(int moisture) { _soil_moisture_1_thresh = moisture; }
+        void set_soil_moisture_2_thresh(int moisture) { _soil_moisture_2_thresh = moisture; }
+        void set_water_time(int water_time) { _water_time = water_time; }
     private:
 
         // Sensor related data
@@ -79,12 +80,13 @@ class Greenhouse {
         bool _is_heater_on;
 
         // threshold related data
-        int _temp_low;
-        int _temp_high;
+        float _temp_low;
+        float _temp_high;
         int _humidity_low;
         int _light_thresh;
         int _soil_moisture_1_thresh;
         int _soil_moisture_2_thresh;
+        int _water_time;
         DHT _dht;
 
         // Checks sensors and stores results
