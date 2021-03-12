@@ -59,6 +59,7 @@ class Greenhouse {
         int get_light_thresh() { return _light_thresh; }
         int get_soil_moisture_1_thresh() { return _soil_moisture_1_thresh; }
         int get_soil_moisture_2_thresh() { return _soil_moisture_2_thresh; }
+        int get_water_time() { return _water_time; }
 
         // setters
         void set_temp_low(float temp_low) { _temp_low = temp_low; }

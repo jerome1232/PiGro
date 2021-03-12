@@ -29,8 +29,9 @@ void loop() {
     else if (key == "sleep_time") { sleep_delay = value.toInt(); }
     else if (key == "water_time") { greenhouse.set_water_time(value.toInt()); }
     else if (key == "water_thresh") {
-      greenhouse.set_soil_moisture_1_thresh(value.toInt());
-      greenhouse.set_soil_moisture_2_thresh(value.toInt());
+      int raw_value = (value.toInt() / 100) * 1023;
+      greenhouse.set_soil_moisture_1_thresh(raw_value);
+      greenhouse.set_soil_moisture_2_thresh(raw_value);
     }
     else if (key == "light_thresh") { greenhouse.set_light_thresh(value.toInt()); }
   }
@@ -62,6 +63,28 @@ void loop() {
   Serial.print(',');
   Serial.print("soil_moisture_2:");
   Serial.print(greenhouse.get_soil_moisture_2());
+  Serial.print(',');
+  // Also send current threshold data
+  Serial.print("low_temp:");
+  Serial.print(greenhouse.get_temp_low());
+  Serial.print(',');
+  Serial.print("high_temp:");
+  Serial.print(greenhouse.get_temp_high());
+  Serial.print(',');
+  Serial.print("low_humidity:");
+  Serial.print(greenhouse.get_humidity_low());
+  Serial.print(',');
+  Serial.print("sleep_time:");
+  Serial.print(sleep_delay);
+  Serial.print(',');
+  Serial.print("water_time:");
+  Serial.print(greenhouse.get_water_time());
+  Serial.print(',');
+  Serial.print("water_thresh:");
+  Serial.print(greenhouse.get_soil_moisture_1_thresh());
+  Serial.print(',');
+  Serial.print("light_thresh:");
+  Serial.print(greenhouse.get_light_thresh());
   Serial.print('>');
 
   // Turn off built-in LED light before sleep

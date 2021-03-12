@@ -47,7 +47,6 @@ while True:
 	else:
 		logging.info("Data Received: " + data)
 		# Writing data to uno
-		data = data + ','
 		uno.write(data)
 
 	# Read data from serial line
@@ -75,6 +74,9 @@ while True:
 		# Assigning respective key : value pairs
 		if tmp[0] in sensor_data.keys():
 			sensor_data[tmp[0]] = tmp[1]
+			logging.info("values: %s, %s", tmp[0], tmp[1])
+		elif tmp[0] in thresh_data.keys():
+			thresh_data[tmp[0]] = tmp[1]
 			logging.info("values: %s, %s", tmp[0], tmp[1])
 
 	# Changing ints to bools

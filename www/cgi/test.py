@@ -38,8 +38,6 @@ for key in data:
    to_write += str(data[key])
    to_write += ','
 
-to_write = to_write.rstrip(to_write[-1])
-
 print(to_write)
 
 client.write(to_write)
