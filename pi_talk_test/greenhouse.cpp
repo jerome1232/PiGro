@@ -24,6 +24,7 @@ Greenhouse::Greenhouse():_dht(DHT_PIN, DHT_TYPE) {
   _soil_moisture_2_thresh = 700;
   _is_light_on = false;
   _is_heater_on = false;
+  _water_time = 60000;
 }
 
 /*

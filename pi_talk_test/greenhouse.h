@@ -59,7 +59,7 @@ class Greenhouse {
         int get_light_thresh() { return _light_thresh; }
         int get_soil_moisture_1_thresh() { return _soil_moisture_1_thresh; }
         int get_soil_moisture_2_thresh() { return _soil_moisture_2_thresh; }
-        int get_water_time() { return _water_time; }
+        long get_water_time() { return _water_time; }
 
         // setters
         void set_temp_low(float temp_low) { _temp_low = temp_low; }
@@ -68,7 +68,7 @@ class Greenhouse {
         void set_light_thresh(int light_thresh) { _light_thresh = light_thresh; }
         void set_soil_moisture_1_thresh(int moisture) { _soil_moisture_1_thresh = moisture; }
         void set_soil_moisture_2_thresh(int moisture) { _soil_moisture_2_thresh = moisture; }
-        void set_water_time(int water_time) { _water_time = water_time; }
+        void set_water_time(long water_time) { _water_time = water_time; }
     private:
 
         // Sensor related data
@@ -87,7 +87,7 @@ class Greenhouse {
         int _light_thresh;
         int _soil_moisture_1_thresh;
         int _soil_moisture_2_thresh;
-        int _water_time;
+        long _water_time;
         DHT _dht;
 
         // Checks sensors and stores results
