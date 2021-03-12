@@ -34,7 +34,7 @@
             <span class="label">High Temperature</span>
             <input type="text"
                    name="high_temp"
-                   pattern="^/d{1,2}[cf]$"
+                   pattern="^\d{1,2}[cf]$"
                    title="Please enter up to a two digit number followed
                           by either 'f' or 'c' for fahrenheit or celsius"
                    placeholder="40f"
@@ -44,7 +44,7 @@
             <span class="label">Low Humidity</span>
             <input type="text"
                    name="low_humidity"
-                   pattern="^/d{1,2}%$"
+                   pattern="^\d{1,2}%$"
                    title="Please enter minimum relative Humidity as a
                           percent"
                    placeholder="50%"
@@ -70,7 +70,7 @@
                           by an &quotes & quote for seconds or &quote m &quote for
                           minutes."
                    placeholder="3m"
-                   pattern="^/d{1,2}[ms]$"
+                   pattern="^\d{1,2}[ms]$"
             />
           </div>
           <div class="form">
@@ -80,7 +80,7 @@
                    title="Please enter the threshold at which to water as a
                           percent"
                    placeholder="30%"
-                   pattern="^/d{1,2}%$"
+                   pattern="^\d{1,2}%$"
             />
           </div>
           <div class="form">

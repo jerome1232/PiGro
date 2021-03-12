@@ -22,6 +22,8 @@
 #define  SOIL_MOISTURE01_PIN     A1
 #define  SOIL_MOISTURE02_PIN     A2
 #define  HEATER_PIN              9
+#define  SOIL_MOISTURE01_ON_PIN  11
+#define  SOIL_MOISTURE02_ON_PIN  10
 
 class Greenhouse {
     public:

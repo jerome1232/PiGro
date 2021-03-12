@@ -40,7 +40,7 @@ class Comune_Ardu:
 		self.dev = '/dev/ttyACM0' if dev is None else dev
 		self.rate = 9600 if rate is None else rate
 
-		self.ser = serial.Serial(self.dev, self.rate, timeout=None)
+		self.ser = serial.Serial(self.dev, self.rate, timeout=0.1)
 
 	def write(self, message):
 		'''Simply encodes a string to bytes and writes it to serial line.'''
@@ -51,7 +51,7 @@ class Comune_Ardu:
 		self.ser.flush()		# flush the buffer
 		item = self.ser.read(1)	# Read a single character in from serial
 		item = item.decode()	# Decode bytes object to UTF-8 string
-		data = ''				# Initilize data to empty string
+		data = ''				# Initialize data to empty string
 
 		# This loops until it finds a "start_char" to avoid
 		# accidentally reading a half message.
