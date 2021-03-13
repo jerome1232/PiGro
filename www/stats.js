@@ -18,7 +18,7 @@ if (unit === null) {
 
 // Draw all dynamic elements
 draw_latest_data(data, button.property("checked"));
-draw_temp_graph(button.property("checked"));
+draw_temp_graph(data, button.property("checked"));
 draw_light_graph(data);
 draw_humidity_graph(data);
 draw_moisture_1(data);
@@ -144,137 +144,22 @@ function draw_latest_data(data, isFahrenheit) {
 }
 
 // draw the temperature over time graph
-async function draw_temp_graph(isFahrenheit) {
+function draw_temp_graph(data, isFahrenheit) {
 
-  var data = await d3.json("data/sensor_data.json");
-
-  data.forEach( (d) => {
-    d.d_date = new Date(d.time_stamp * 1000);
-    if (isFahrenheit) {
-      d.t_temp = (d.temp * (9.0 / 5.0) + 32).toFixed(2);
-    } else {
-      d.t_temp = d.temp;
-    }
-  });
-
-
-  // height = 500
-  // width = 500
-
-  // margin = ({top: 20, right: 30, bottom: 30, left: 40})
-
-  // x = d3.scaleUtc()
-  //   .domain(d3.extent(data, d => d.d_date))
-  //   .range([margin.left, width - margin.right])
-
-
-  // y = d3.scaleLinear()
-  //   .domain([0, d3.max(data, d => d.t_temp)]).nice()
-  //   .range([height - margin.bottom, margin.top])
-
-  // xAxis = g => g
-  //   .attr("transform", `translate(0,${height - margin.bottom})`)
-  //   .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0))
-
-  // yAxis = g => g
-  // .attr("transform", `translate(${margin.left},0)`)
-  // .call(d3.axisLeft(y))
-  // .call(g => g.select(".domain").remove())
-  // .call(g => g.select(".tick:last-of-type text").clone()
-  //   .attr("x", 3)
-  //   .attr("text-anchor", "start")
-  //   .attr("font-weight", "bold")
-  //   .text(data.y))
-
-  // line = d3.line()
-  //   .curve(d3.curveStep)
-  //   .defined(d => !isNaN(d.t_temp))
-  //   .x(d => x(d.d_date))
-  //   .y(d => y(d.t_temp))
-
-
-
-  // svg = d3.select("#temp_graph")
-  //     .append('svg')
-  //     .attr('width', width)
-  //     .attr('height', height)
-  //     .style("-webkit-tap-highlight-color", "transparent")
-  //     .style("overflow", "visible");
-
-  // svg.append("g")
-  //     .call(xAxis);
-
-  // svg.append("g")
-  //     .call(yAxis);
-
-  // svg.append("path")
-  //     .datum(data)
-  //     .attr("fill", "none")
-  //     .attr("stroke", "steelblue")
-  //     .attr("stroke-width", 1.5)
-  //     .attr("stroke-linejoin", "round")
-  //     .attr("stroke-linecap", "round")
-  //     .attr("d", line);
-
-  // const tooltip = svg.append("g");
-
-  // svg.on("touchmove mousemove", function(event) {
-  //   const {d_date, t_temp} = bisect(d3.pointer(event, this)[0]);
-
-  // tooltip
-  //       .attr("transform", `translate(${x(d_date)},${y(t_temp)})`)
-  //       .call(callout, `${formatValue(t_temp)}
-  // ${formatDate(d_date)}`);
-  //   });
-
-  // svg.on("touchend mouseleave", () => tooltip.call(callout, null));
-
-  // callout = (g, value) => {
-  //   if (!value) return g.style("display", "none");
-
-  //   g
-  //       .style("display", null)
-  //       .style("pointer-events", "none")
-  //       .style("font", "10px sans-serif");
-
-  //   const path = g.selectAll("path")
-  //     .data([null])
-  //     .join("path")
-  //       .attr("fill", "white")
-  //       .attr("stroke", "black");
-
-  //   const text = g.selectAll("text")
-  //     .data([null])
-  //     .join("text")
-  //     .call(text => text
-  //       .selectAll("tspan")
-  //       .data((value + "").split(/\n/))
-  //       .join("tspan")
-  //         .attr("x", 0)
-  //         .attr("y", (d, i) => `${i * 1.1}em`)
-  //         .style("font-weight", (_, i) => i ? null : "bold")
-  //         .text(d => d));
-
-  //   const {x, y, width: w, height: h} = text.node().getBBox();
-
-  //   text.attr("transform", `translate(${-w / 2},${15 - y})`);
-  //   path.attr("d", `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`);
-  // }
-
-  // bisect =
-  //   bisect = d3.bisector(d => d.d_date).left;
-  //   return mx => {
-  //     const date = x.invert(mx);
-  //     const index = bisect(data, date, 1);
-  //     const a = data[index - 1];
-  //     const b = data[index];
-  //     return b && (date - a.d_date > b.d_date - date) ? b : a;
-  //   };
+  data.then(function (data) {
+    data.forEach( (d) => {
+      d.d_date = new Date(d.time_stamp * 1000);
+      if (isFahrenheit) {
+        d.t_temp = (d.temp * (9.0 / 5.0) + 32).toFixed(2);
+      } else {
+        d.t_temp = d.temp;
+      }
+    });
 
   // set dimensions and margins
   var margin = {top: 50, right: 30, bottom: 100, left: 60 },
-    width = 600 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
 
   // Create svg
   var svg = d3.select("#temp_graph")
@@ -345,7 +230,7 @@ async function draw_temp_graph(isFahrenheit) {
       .x(function(d) { return x(d.d_date) })
       .y(function(d) { return y(d.t_temp) })
     )
-  // })
+  })
 }
 
 // Draw the light over time graph
