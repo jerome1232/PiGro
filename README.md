@@ -10,4 +10,4 @@ This project utilizes an Arduino Uno paired with a Raspberry Pi 3b+ (though any 
 
 ### Sample Web UI
 
-![](images/web-ui-sample.png)
+![](images/web-sample.png)
