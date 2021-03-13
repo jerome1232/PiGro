@@ -1,9 +1,9 @@
 #charts {
-  display: grid;
-  grid-template-columns: 2fr 2fr;
-  column-gap: 2px;
-  margin: 0 auto;
-  justify-content: center;
+  /* display: grid; */
+  /* grid-template-columns: 1fr; */
+  /* column-gap: 5%; */
+  margin: 0;
+  /* justify-content: center; */
 }
 
 div.tooltip {
@@ -24,7 +24,8 @@ div.tooltip {
   box-shadow: 0.4em 0.4em 0.2em;
   margin: 1em auto;
   background-color: #edebd4;
-  padding: 0.5em;
+  padding: 0;
+  max-width: fit-content;
   border-radius: 10px;
 }
 

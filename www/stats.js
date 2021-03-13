@@ -1,5 +1,22 @@
 // Read data
 const button = d3.selectAll('input[name="units"]');
+
+// Register an interval to reload the graphs every so often
+var intervalId = window.setInterval(function() {
+  update();
+}, 60000)
+
+// When celsius/fahrenheit are modified, update the
+// elements that involve temperature
+button.on('change', function(d) {
+  const isTrue = (this.value === 'true');
+  localStorage.setItem("temp_unit", isTrue);
+  d3.select("#temp_graph").selectAll("svg").remove();
+  d3.select("#curr_data").html(null);
+  draw_temp_graph();
+  draw_latest_data();
+})
+
 var data = d3.json("data/sensor_data.json");
 
 // load fahrenheit/celsius units from cache
@@ -17,50 +34,40 @@ if (unit === null) {
 }
 
 // Draw all dynamic elements
-draw_latest_data(data, button.property("checked"));
-draw_temp_graph(data, button.property("checked"));
-draw_light_graph(data);
-draw_humidity_graph(data);
-draw_moisture_1(data);
-draw_moisture_2(data);
+draw_latest_data();
+draw_temp_graph();
+draw_light_graph();
+draw_humidity_graph();
+draw_moisture_1();
+draw_moisture_2();
 
-// When celsius/fahrenheit are modified, update the
-// elements that involve temperature
-button.on('change', function(d) {
-  var isTrue = (this.value === 'true');
-  localStorage.setItem("temp_unit", isTrue);
-  d3.select("#temp_graph").selectAll("svg").remove();
-  d3.select("#curr_data").html(null);
-  draw_temp_graph(data, isTrue);
-  draw_latest_data(data, isTrue);
-})
 
-function update(data, isFahrenheit) {
+function update() {
   d3.select("#temp_graph").selectAll("svg").remove();
   d3.select("#curr_data").html(null);
   d3.select("#light_graph").selectAll("svg").remove();
   d3.select("#humidity_graph").selectAll("svg").remove();
   d3.select("#moisture_1_graph").selectAll("svg").remove();
   d3.select("#moisture_2_graph").selectAll("svg").remove();
-  draw_latest_data(data, button.property("checked"));
-  draw_temp_graph(data, button.property("checked"));
-  draw_light_graph(data);
-  draw_humidity_graph(data);
-  draw_moisture_1(data);
-  draw_moisture_2(data);
+  draw_latest_data();
+  draw_temp_graph();
+  draw_light_graph();
+  draw_humidity_graph();
+  draw_moisture_1();
+  draw_moisture_2();
 }
 
 function setRadio(unit) {
     if (unit) {
       // select Fahrenheit
-      d3.select('#farenheit').attr('checked', 'true');
+      d3.select('#fahrenheit').attr('checked', 'true');
       d3.select('#celsius').attr('checked', null);
       // store the value in localstorage
       localStorage.setItem("temp_unit", true);
     } else {
       // select celsius
       d3.select('#celsius').attr('checked', 'true');
-      d3.select('#farenheit').attr('checked', null);
+      d3.select('#fahrenheit').attr('checked', null);
       // store value in localstroage
       localStorage.setItem('temp_unit', false);
   }
@@ -69,8 +76,11 @@ function setRadio(unit) {
 var formatTime = d3.timeFormat("%I:%M %p");
 
 // Draw the current data element
-function draw_latest_data(data, isFahrenheit) {
+function draw_latest_data() {
 
+  const button = d3.selectAll('input[name="units"]');
+  var data = d3.json("data/sensor_data.json");
+  const isFahrenheit = button.property('checked');
 
   data.then(function(data) {
     data.forEach(function(d) {
@@ -81,7 +91,7 @@ function draw_latest_data(data, isFahrenheit) {
         d.t_temp = d.temp;
       }
     })
-    // geting the lastest data only
+    // getting the latest data only
     data = data[data.length - 1];
     // Selecting desired div and binding data to it
     para = d3.selectAll("#curr_data")
@@ -151,11 +161,18 @@ function draw_latest_data(data, isFahrenheit) {
 }
 
 // draw the temperature over time graph
-function draw_temp_graph(data, isFahrenheit) {
+function draw_temp_graph() {
+
+  const button = d3.selectAll('input[name="units"]');
+  var data = d3.json("data/sensor_data.json");
+  const isFahrenheit = button.property('checked');
+
+  // Creating tooltip div
   var div = d3.select("#temp_graph").append("div")
   .attr("class", "tooltip")
   .style("opacity", 0);
 
+  // Handling data when it's arrived
   data.then(function (data) {
     data.forEach( (d) => {
       d.d_date = new Date(d.time_stamp * 1000);
@@ -168,7 +185,7 @@ function draw_temp_graph(data, isFahrenheit) {
 
     // set dimensions and margins
     var margin = {top: 50, right: 30, bottom: 100, left: 60 },
-      width = 460 - margin.left - margin.right,
+      width = 800 - margin.left - margin.right,
       height = 400 - margin.top - margin.bottom;
 
     // Create svg
@@ -267,7 +284,9 @@ function draw_temp_graph(data, isFahrenheit) {
 }
 
 // Draw the light over time graph
-function draw_light_graph(data) {
+function draw_light_graph() {
+
+  var data = d3.json("data/sensor_data.json");
 
   var div = d3.select("#light_graph").append("div")
     .attr("class", "tooltip")
@@ -279,7 +298,7 @@ function draw_light_graph(data) {
     })
     // set dimensions and margins
     var margin = {top: 50, right: 30, bottom: 70, left: 60 },
-      width = 460 - margin.left - margin.right,
+      width = 800 - margin.left - margin.right,
       height = 460 - margin.top - margin.bottom;
 
     // Create svg
@@ -377,7 +396,10 @@ function draw_light_graph(data) {
 }
 
 // Draw the humidity over time graph
-function draw_humidity_graph(data) {
+function draw_humidity_graph() {
+
+  var data = d3.json("data/sensor_data.json");
+
   var div = d3.select("#humidity_graph").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
@@ -388,8 +410,8 @@ function draw_humidity_graph(data) {
     })
     // set dimensions and margins
     var margin = {top: 50, right: 30, bottom: 70, left: 60 },
-      width = 460 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
+      width = 800 - margin.left - margin.right,
+      height = 460 - margin.top - margin.bottom;
 
     // Create svg
     var svg = d3.select("#humidity_graph")
@@ -429,11 +451,6 @@ function draw_humidity_graph(data) {
                            (height + margin.top + 40) + ") ")
       .style("text-anchor", "middle")
       .text("Time");
-
-
-    // Add Y axis
-    //minY = d3.min(data, function(d) { return +d.humidit} );
-    //maxY = d3.max(data, function(d) { return +d.temp } );
 
     var y = d3.scaleLinear()
       .domain([0, 100])
@@ -487,7 +504,10 @@ function draw_humidity_graph(data) {
 }
 
 // Draw the humidity over time graph
-function draw_moisture_1(data) {
+function draw_moisture_1() {
+
+  var data = d3.json("data/sensor_data.json");
+
   var div = d3.select("#humidity_graph").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
@@ -499,8 +519,8 @@ function draw_moisture_1(data) {
     })
     // set dimensions and margins
     var margin = {top: 50, right: 30, bottom: 70, left: 60 },
-      width = 460 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
+      width = 800 - margin.left - margin.right,
+      height = 460 - margin.top - margin.bottom;
 
     // Create svg
     var svg = d3.select("#moisture_1_graph")
@@ -591,7 +611,9 @@ function draw_moisture_1(data) {
   })
 }
 // Draw the humidity over time graph
-function draw_moisture_2(data) {
+function draw_moisture_2() {
+
+  var data = d3.json("data/sensor_data.json");
 
   var div = d3.select("#humidity_graph").append("div")
     .attr("class", "tooltip")
@@ -604,8 +626,8 @@ function draw_moisture_2(data) {
     })
     // set dimensions and margins
     var margin = {top: 50, right: 30, bottom: 70, left: 60 },
-      width = 460 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
+      width = 800 - margin.left - margin.right,
+      height = 460 - margin.top - margin.bottom;
 
     // Create svg
     var svg = d3.select("#moisture_2_graph")
