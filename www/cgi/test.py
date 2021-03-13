@@ -12,6 +12,7 @@ print()
 print("<html>")
 print("<title>Threshold data submitted</title>")
 print('<link type="text/css" rel="stylesheet" href="../default.css"/>')
+print('<link type="text/css" rel="stylesheet" href="cgi.css"/>')
 
 form = cgi.FieldStorage()
 data = {}
@@ -38,9 +39,9 @@ for key in data:
    to_write += str(data[key])
    to_write += ','
 
-print(to_write)
-
 client.write(to_write)
 
-print('This is a test, python3 works!\n')
+print('<main>')
+print('Data sent. It will be picked up on next sensor check.<br/>')
 print('<a href="../control.html">back</a>')
+print('</main>')

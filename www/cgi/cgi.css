@@ -1,0 +1,12 @@
+body {
+   justify-content: center;
+   text-align: center;
+}
+
+main {
+   margin: 5em;
+   padding: 1em;
+   border-radius: 25px;
+   box-shadow: 0.4em 0.4em 0.2em;
+   display: inline-block;
+}
