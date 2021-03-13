@@ -4,6 +4,7 @@
 // int sleep_delay = 900000;           // Wait 15 minutes for next check
 
 Greenhouse greenhouse = Greenhouse();
+unsigned long sleep_delay = 300000UL;   // sleep for 5 minutes
 
 void setup() {
   // Begin serial communication at
@@ -14,17 +15,26 @@ void setup() {
 }
 
 void loop() {
-  unsigned long sleep_delay = 300000UL;   // sleep for 5 minutes
-  // Initialize variables
-  // String data = "";
 
   // Light up built-in LED while running sensor check
   digitalWrite(LED_BUILTIN, HIGH);
 
   // Read in any available threshold settings.
-  // if (Serial.available() > 0) {
-  //   data = Serial.readStringUntil('>');
-  // }
+  while (Serial.available() > 0) {
+    String key = Serial.readStringUntil(':');
+    String value = Serial.readStringUntil(',');
+    if (key == "low_temp") { greenhouse.set_temp_low(value.toFloat()); }
+    else if (key == "high_temp") { greenhouse.set_temp_high(value.toFloat()); }
+    else if (key == "low_humidity") { greenhouse.set_humidity_low(value.toInt()); }
+    else if (key == "sleep_time") { sleep_delay = value.toInt(); }
+    else if (key == "water_time") { greenhouse.set_water_time(value.toInt()); }
+    else if (key == "water_thresh") {
+      int raw_value = (value.toInt() / 100) * 1023;
+      greenhouse.set_soil_moisture_1_thresh(raw_value);
+      greenhouse.set_soil_moisture_2_thresh(raw_value);
+    }
+    else if (key == "light_thresh") { greenhouse.set_light_thresh(value.toInt()); }
+  }
 
   greenhouse.run_sensor_check();
   greenhouse.run_tasks();
@@ -53,6 +63,28 @@ void loop() {
   Serial.print(',');
   Serial.print("soil_moisture_2:");
   Serial.print(greenhouse.get_soil_moisture_2());
+  Serial.print(',');
+  // Also send current threshold data
+  Serial.print("low_temp:");
+  Serial.print(greenhouse.get_temp_low());
+  Serial.print(',');
+  Serial.print("high_temp:");
+  Serial.print(greenhouse.get_temp_high());
+  Serial.print(',');
+  Serial.print("low_humidity:");
+  Serial.print(greenhouse.get_humidity_low());
+  Serial.print(',');
+  Serial.print("sleep_time:");
+  Serial.print(sleep_delay);
+  Serial.print(',');
+  Serial.print("water_time:");
+  Serial.print(greenhouse.get_water_time());
+  Serial.print(',');
+  Serial.print("water_thresh:");
+  Serial.print(greenhouse.get_soil_moisture_1_thresh());
+  Serial.print(',');
+  Serial.print("light_thresh:");
+  Serial.print(greenhouse.get_light_thresh());
   Serial.print('>');
 
   // Turn off built-in LED light before sleep

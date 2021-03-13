@@ -13,9 +13,9 @@ h1 {
   margin: 0 auto;
   background-color: #edebd4;
   padding: 0.5em;
+  width: fit-content;
   border-radius: 25px;
-  width: auto;
-  justify-content: center;
+  justify-items: center;
 }
 
 .form {
@@ -30,10 +30,14 @@ input {
     border-radius: 25px;
     text-align: center;
     background-color: #FDF9E4;
+    width: 10em;
+    height: 1em;
 }
 
 .label {
     padding-right: 0.3em;
+    width: 9.5em;
+    height: 1em;
 }
 
 .label:after {
@@ -44,10 +48,12 @@ input {
     background-color: #879826;
     color: #003641;
     display: inline;
+    height: 2em;
 }
 
 #reset{
     background-color: #D14821;
     color: #003641;
     display: inline;
+    height: 2em;
 }

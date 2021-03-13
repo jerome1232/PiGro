@@ -24,6 +24,7 @@ Greenhouse::Greenhouse():_dht(DHT_PIN, DHT_TYPE) {
   _soil_moisture_2_thresh = 700;
   _is_light_on = false;
   _is_heater_on = false;
+  _water_time = 60000;
 }
 
 /*
@@ -67,9 +68,15 @@ void Greenhouse::run_tasks() {
 int Greenhouse::check_soil_moisture(int bay) {
   int reading = -1;
   switch (bay) {
-    case 1 : reading = analogRead(SOIL_MOISTURE01_PIN);
+    case 1 : digitalWrite(SOIL_MOISTURE01_ON_PIN, HIGH);
+             delay(1);
+             reading = analogRead(SOIL_MOISTURE01_PIN);
+             digitalWrite(SOIL_MOISTURE01_ON_PIN, LOW);
              break;
-    case 2 : reading = analogRead(SOIL_MOISTURE02_PIN);
+    case 2 : digitalWrite(SOIL_MOISTURE02_ON_PIN, HIGH);
+             delay(1);
+             reading = analogRead(SOIL_MOISTURE02_PIN);
+             digitalWrite(SOIL_MOISTURE02_ON_PIN, LOW);
              break;
   }
   return reading;
@@ -215,7 +222,7 @@ void Greenhouse::operate_water() {
 
   // run water for 2.5 minutes
   if (will_water) {
-    delay(150000);
+    delay(_water_time);
   }
 
   // turn everything off

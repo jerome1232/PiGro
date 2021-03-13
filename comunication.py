@@ -6,9 +6,11 @@ import json
 import os
 import logging
 
-uno = Comune_Ardu.Comune_Ardu()
-
 logging.basicConfig(level=logging.INFO)
+logging.info(os.getcwd())
+
+uno = Comune_Ardu.Comune_Ardu()
+server = Sock_Serv.Server(location='home/pi/PiGro/www/cgi/sock')
 
 sensor_data = {
 	'temp': None,
@@ -21,14 +23,36 @@ sensor_data = {
 	'soil_moisture_2': None
 }
 
+thresh_data = {
+	'low_temp' : None,
+	'high_temp' : None,
+	'water_time' : None,
+	'light_thresh' : None,
+	'low_humidity' : None,
+	'water_thresh' : None
+}
+
 while True:
-	# sleep to give the processor some time
-	# to do other tasks.
-	time.sleep(.1)
+
+
+	# check the UDS for data
+	logging.info("Checking UDS")
+	data = server.get_data()
+	time.sleep(0.1)
+	server.setup()
+
+	if data is None:
+		logging.debug('No data, moving on')
+	else:
+		logging.info("Data Received: " + data)
+		# Writing data to uno
+		uno.write(data)
+
 	# Read data from serial line
 	logging.info("Waiting for serial communication")
 	data = uno.read()
 	logging.info("read data from uno: " + data)
+
 	# key : value pairs are split by commas, this splits the string
 	# into an array of strings that each holds a key : value pair
 	split_data = data.split(',')
@@ -50,6 +74,9 @@ while True:
 		if tmp[0] in sensor_data.keys():
 			sensor_data[tmp[0]] = tmp[1]
 			logging.info("values: %s, %s", tmp[0], tmp[1])
+		elif tmp[0] in thresh_data.keys():
+			thresh_data[tmp[0]] = tmp[1]
+			logging.info("values: %s, %s", tmp[0], tmp[1])
 
 	# Changing ints to bools
 	sensor_data['heat'] = bool(int(sensor_data['heat']))
@@ -67,3 +94,7 @@ while True:
 
 	with open(file_path, 'w') as of:
 		json.dump(data, of)
+
+	# sleep to give the processor some time
+	# to do other tasks.
+	time.sleep(0.1)
