@@ -66,6 +66,8 @@ function setRadio(unit) {
   }
 }
 
+var formatTime = d3.timeFormat("%I:%M %p");
+
 // Draw the current data element
 function draw_latest_data(data, isFahrenheit) {
 
@@ -85,10 +87,13 @@ function draw_latest_data(data, isFahrenheit) {
     para = d3.selectAll("#curr_data")
       .datum(data);
 
+    var t_format = d3.timeFormat('%a %b %e %I:%M %p')
+
     // Append spans for each data item
     para.append("span")
-      .text(function (d) { return d.d_date; });
+      .text(function (d) { return t_format(d.d_date); });
     para.append("br");
+    para.append('hr');
     para.append("span")
       .text( function (d) { return "Temp: " + d.t_temp + "\u00B0"; });
     para.append("span")
@@ -97,10 +102,12 @@ function draw_latest_data(data, isFahrenheit) {
       });
     para.append("span")
       .text( function (d) { return "Light Level: " + d.light; });
+    para.append("br");
     para.append("span")
       .text( function (d) { return "Moisture Bay 1: " + Math.abs(d.soil_moisture_1 / 1023 * 100 - 100).toFixed(2) + "%"; });
     para.append("span")
       .text( function (d) { return "Moisture Bay 2: " + Math.abs(d.soil_moisture_2 / 1023 * 100 - 100).toFixed(2) + "%"; });
+    para.append('br');
 
     // For the heater / light status, I'm adding a green/red circle
     // based on whether they are on or not.
@@ -145,6 +152,9 @@ function draw_latest_data(data, isFahrenheit) {
 
 // draw the temperature over time graph
 function draw_temp_graph(data, isFahrenheit) {
+  var div = d3.select("#temp_graph").append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0);
 
   data.then(function (data) {
     data.forEach( (d) => {
@@ -226,11 +236,45 @@ function draw_temp_graph(data, isFahrenheit) {
     .attr("fill", "none")
     .attr("stroke", "#00a899")
     .attr("stroke-width", 1.5)
+    .attr('id', 'temp_line')
     .attr("d", d3.line()
       .x(function(d) { return x(d.d_date) })
       .y(function(d) { return y(d.t_temp) })
     )
-  })
+
+    // Add dots with tooltips
+    svg.selectAll('dot')
+      .data(data)
+    .enter().append('circle')
+      .attr('r', 1.5)
+      .attr('cx', function(d) { return x(d.d_date); })
+      .attr('cy', function(d) { return y(d.t_temp); })
+      .attr('fill', '#00A198')
+      .on('mouseover', function(event, d) {
+        div.transition()
+          .duration(200)
+          .style('opacity', .9);
+        div.html(formatTime(d.d_date) + '<br/>' + d.t_temp + '\u00B0')
+          .style('left', (event.pageX) + 'px')
+          .style('top', (event.pageY - 28) + 'px');
+      })
+      .on('mouseout', function(d) {
+        div.transition()
+          .duration(500)
+          .style('opacity', 0);
+      })
+    })
+
+  //   var tooltip = d3.select('#temp_graph')
+  //     .append('div')
+  //       .style('opacity', 0)
+  //       .style('position', 'absolute')
+  //       .style('border', 'solid')
+  //       .style('border-width', '2px')
+  //       .style('border-radius', '5px')
+  //       .style('padding', '10px');
+  //       // .text("I'm a tooltip!");
+  // })
 }
 
 // Draw the light over time graph
@@ -396,6 +440,7 @@ function draw_humidity_graph(data) {
         .x(function(d) { return x(d.d_date) })
         .y(function(d) { return y(d.humidity) })
       )
+
   })
 }
 
