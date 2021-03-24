@@ -15,7 +15,9 @@
  * Default constructor
  * Sets all thresholds to default values
  */
-Greenhouse::Greenhouse():_dht(DHT_PIN, DHT_TYPE) {
+Greenhouse::Greenhouse(): _dht(DHT_PIN, DHT_TYPE),
+                          _stepper(STEPPER_IN1, STEPPER_IN2,
+                                   STEPPER_IN3, STEPPER_IN4) {
   _temp_low = 26;
   _temp_high = 33;
   _humidity_low = 30;
@@ -25,6 +27,7 @@ Greenhouse::Greenhouse():_dht(DHT_PIN, DHT_TYPE) {
   _is_light_on = false;
   _is_heater_on = false;
   _water_time = 60000;
+  _steps = 0;
 }
 
 /*
@@ -60,6 +63,7 @@ void Greenhouse::run_tasks() {
   operate_light();
   operate_water();
   operate_heat();
+  operate_lid();
 }
 
 /*
@@ -168,8 +172,7 @@ void Greenhouse::valve_3_on(bool on) {
 void Greenhouse::operate_heat() {
   if (_temp < _temp_low) {
     heater_on(true);
-  }
-  if (_temp > _temp_high) {
+  } else {
     heater_on(false);
   }
 }
@@ -209,7 +212,7 @@ void Greenhouse::operate_water() {
   // do humidity mister separately
   if (_humidity < _humidity_low) {
     valve_2_on(true);
-    delay(30000);
+    delay(10000);
     valve_2_on(false);
   }
   // turn on watering valves
@@ -220,7 +223,7 @@ void Greenhouse::operate_water() {
     valve_3_on(true);
   }
 
-  // run water for 2.5 minutes
+  // run water for
   if (will_water) {
     delay(_water_time);
   }
@@ -233,4 +236,24 @@ void Greenhouse::operate_water() {
 
   // turn the heater back on if it was on previously
   if (heat) { heater_on(true); }
+}
+
+
+/**
+ * operate_lid()
+ *
+ * This will open the lid to vent air if the temperature
+ * rises to much. It will also lower the lid back down
+ * once temperature drops below threshold.
+ */
+void Greenhouse::operate_lid() {
+  if (_temp > _temp_high) {
+    int diff = _temp - _temp_high;
+    if (diff > 20) { diff = 20; }
+    _stepper.move(false, diff);
+    _steps += diff;
+  } else {
+    _stepper.move(true, _steps);
+    _steps = 0;
+  }
 }

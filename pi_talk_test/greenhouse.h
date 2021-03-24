@@ -9,7 +9,8 @@
  * heat, water, and light itself based on various thresholds.
  */
 
-#include <DHT.h>
+#include "DHT.h"
+#include "CheapStepper.h"
 
 #define  DHT_TYPE                DHT11
 #define  DHT_PIN                 8
@@ -24,10 +25,13 @@
 #define  HEATER_PIN              9
 #define  SOIL_MOISTURE01_ON_PIN  11
 #define  SOIL_MOISTURE02_ON_PIN  10
+#define  STEPPER_IN1              2
+#define  STEPPER_IN2             12
+#define  STEPPER_IN3             13
+#define  STEPPER_IN4             A3
 
 class Greenhouse {
     public:
-
         // constructor
         Greenhouse();
 
@@ -40,6 +44,7 @@ class Greenhouse {
          * must run run_sensor_check() at least once before running this
          **********************************************************************/
         void run_tasks();
+
         /***********************************************************************
         /* Checks all sensors and stores them in private variables
          **********************************************************************/
@@ -69,8 +74,8 @@ class Greenhouse {
         void set_soil_moisture_1_thresh(int moisture) { _soil_moisture_1_thresh = moisture; }
         void set_soil_moisture_2_thresh(int moisture) { _soil_moisture_2_thresh = moisture; }
         void set_water_time(long water_time) { _water_time = water_time; }
-    private:
 
+    private:
         // Sensor related data
         float _temp;
         float _humidity;
@@ -88,7 +93,9 @@ class Greenhouse {
         int _soil_moisture_1_thresh;
         int _soil_moisture_2_thresh;
         long _water_time;
+        int _steps;
         DHT _dht;
+        CheapStepper _stepper;
 
         // Checks sensors and stores results
         float check_temp() { return _dht.readTemperature();}
@@ -108,6 +115,7 @@ class Greenhouse {
         void operate_heat();
         void operate_light();
         void operate_water();
+        void operate_lid();
 };
 
 #endif

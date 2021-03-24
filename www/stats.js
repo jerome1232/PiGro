@@ -34,27 +34,32 @@ if (unit === null) {
 }
 
 // Draw all dynamic elements
-draw_latest_data();
-draw_temp_graph();
-draw_light_graph();
-draw_humidity_graph();
-draw_moisture_1();
-draw_moisture_2();
+draw_latest_data(data);
+draw_temp_graph(data);
+draw_light_graph(data);
+draw_humidity_graph(data);
+draw_moisture_1(data);
+draw_moisture_2(data);
 
 
 function update() {
+  var data = d3.json("data/sensor_data.json");
+
+  // Removing all traces of the old
   d3.select("#temp_graph").selectAll("svg").remove();
   d3.select("#curr_data").html(null);
   d3.select("#light_graph").selectAll("svg").remove();
   d3.select("#humidity_graph").selectAll("svg").remove();
   d3.select("#moisture_1_graph").selectAll("svg").remove();
   d3.select("#moisture_2_graph").selectAll("svg").remove();
-  draw_latest_data();
-  draw_temp_graph();
-  draw_light_graph();
-  draw_humidity_graph();
-  draw_moisture_1();
-  draw_moisture_2();
+
+  // drawing the new
+  draw_latest_data(data);
+  draw_temp_graph(data);
+  draw_light_graph(data);
+  draw_humidity_graph(data);
+  draw_moisture_1(data);
+  draw_moisture_2(data);
 }
 
 function setRadio(unit) {
@@ -76,10 +81,10 @@ function setRadio(unit) {
 var formatTime = d3.timeFormat("%I:%M %p");
 
 // Draw the current data element
-function draw_latest_data() {
+function draw_latest_data(data) {
 
   const button = d3.selectAll('input[name="units"]');
-  var data = d3.json("data/sensor_data.json");
+  // var data = d3.json("data/sensor_data.json");
   const isFahrenheit = button.property('checked');
 
   data.then(function(data) {
@@ -161,10 +166,10 @@ function draw_latest_data() {
 }
 
 // draw the temperature over time graph
-function draw_temp_graph() {
+function draw_temp_graph(data) {
 
   const button = d3.selectAll('input[name="units"]');
-  var data = d3.json("data/sensor_data.json");
+  // var data = d3.json("data/sensor_data.json");
   const isFahrenheit = button.property('checked');
 
   // Creating tooltip div
@@ -284,9 +289,9 @@ function draw_temp_graph() {
 }
 
 // Draw the light over time graph
-function draw_light_graph() {
+function draw_light_graph(data) {
 
-  var data = d3.json("data/sensor_data.json");
+  // var data = d3.json("data/sensor_data.json");
 
   var div = d3.select("#light_graph").append("div")
     .attr("class", "tooltip")
@@ -396,9 +401,9 @@ function draw_light_graph() {
 }
 
 // Draw the humidity over time graph
-function draw_humidity_graph() {
+function draw_humidity_graph(data) {
 
-  var data = d3.json("data/sensor_data.json");
+  // var data = d3.json("data/sensor_data.json");
 
   var div = d3.select("#humidity_graph").append("div")
     .attr("class", "tooltip")
@@ -504,9 +509,9 @@ function draw_humidity_graph() {
 }
 
 // Draw the humidity over time graph
-function draw_moisture_1() {
+function draw_moisture_1(data) {
 
-  var data = d3.json("data/sensor_data.json");
+  // var data = d3.json("data/sensor_data.json");
 
   var div = d3.select("#humidity_graph").append("div")
     .attr("class", "tooltip")
@@ -611,9 +616,9 @@ function draw_moisture_1() {
   })
 }
 // Draw the humidity over time graph
-function draw_moisture_2() {
+function draw_moisture_2(data) {
 
-  var data = d3.json("data/sensor_data.json");
+  // var data = d3.json("data/sensor_data.json");
 
   var div = d3.select("#humidity_graph").append("div")
     .attr("class", "tooltip")
