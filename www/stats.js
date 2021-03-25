@@ -215,7 +215,7 @@ function draw_temp_graph(data) {
     var x = d3.scaleTime()
       .domain(d3.extent(data, function(d) { return d.d_date; }))
       .range([0, width]);
-    svg.append("g")
+    var xAxis = svg.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x))
       .selectAll("text")
@@ -240,7 +240,7 @@ function draw_temp_graph(data) {
     var y = d3.scaleLinear()
       .domain([minY, maxY])
       .range([height, 0]);
-    svg.append("g")
+    var yAxis = svg.append("g")
       .call(d3.axisLeft(y));
 
     // Add Y axis label
@@ -253,7 +253,7 @@ function draw_temp_graph(data) {
       .text("Degrees");
 
     // Add a line
-    svg.append("path")
+    var line = svg.append("path")
       .datum(data)
       .attr("fill", "none")
       .attr("stroke", "#00a899")
@@ -285,6 +285,28 @@ function draw_temp_graph(data) {
           .duration(500)
           .style('opacity', 0);
       })
+
+      // var zoom = d3.zoom()
+      //   .scaleExtent([0.5, 20])
+      //   .extent([[0, 0], [width, height]])
+      //   .on("zoom", updateTemp);
+
+      //   svg.append('rect')
+      //     .attr('width', width)
+      //     .attr('height', height)
+      //     .style('fill', 'none')
+      //     .style('pointer-events', 'all')
+      //     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+      //     .call(zoom);
+
+      // function updateTemp() {
+
+      //   var newX = d3.event.transform.rescaleX(x);
+      //   var newY = d3.event.transform.rescaleY(y);
+
+      //   xAxis.call(d3.axisBottom(newX));
+      //   yAxis.call(d3.axisLeft(newYU));
+      // }
   })
 }
 
@@ -344,11 +366,6 @@ function draw_light_graph(data) {
                            (height + margin.top + 40) + ") ")
       .style("text-anchor", "middle")
       .text("Time");
-
-
-    // Add Y axis
-    //minY = d3.min(data, function(d) { return +d.light} );
-    //maxY = d3.max(data, function(d) { return +d.light} );
 
     var y = d3.scaleLinear()
       .domain([0, 1024])
