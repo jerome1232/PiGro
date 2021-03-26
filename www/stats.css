@@ -49,3 +49,7 @@ div.tooltip {
 #curr_data>span {
   margin: 1em;
 }
+
+#curr_thresh>span {
+  margin: 1em;
+}

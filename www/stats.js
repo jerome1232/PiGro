@@ -41,6 +41,7 @@ draw_light_graph(data);
 draw_humidity_graph(data);
 draw_moisture_1(data);
 draw_moisture_2(data);
+draw_curr_thresholds(data);
 
 
 function update() {
@@ -53,6 +54,7 @@ function update() {
   d3.select("#humidity_graph").selectAll("svg").remove();
   d3.select("#moisture_1_graph").selectAll("svg").remove();
   d3.select("#moisture_2_graph").selectAll("svg").remove();
+  d3.select("#curr_thresh").html(null);
 
   // drawing the new
   draw_latest_data(data);
@@ -61,6 +63,7 @@ function update() {
   draw_humidity_graph(data);
   draw_moisture_1(data);
   draw_moisture_2(data);
+  draw_curr_thresholds(data);
 }
 
 function setRadio(unit) {
@@ -315,8 +318,8 @@ function draw_temp_graph(data) {
       // xAxis.scale(newX); xAxis.cal(xAxis);
 
       // update the axes
-      xAxis.call(d3.axisBottom(newX));
-      yAxis.call(d3.axisLeft(newY));
+      xAxis.scale(newX); xAxis.call(newX);
+      yAxis.scale(newY); yAxis.call(newY);
 
       // update the line
       line
@@ -773,4 +776,49 @@ function draw_moisture_2(data) {
           .style('opacity', 0);
       })
   })
+}
+
+function draw_curr_thresholds(data) {
+  const button = d3.selectAll('input[name="units"]');
+  // var data = d3.json("data/sensor_data.json");
+  const isFahrenheit = button.property('checked');
+
+  data.then(function(data) {
+    data.forEach(function(d) {
+      console.log(d.low_temp);
+      if (isFahrenheit) {
+        d.t_temp_low = (d.low_temp *(9.0/5.0) + 32).toFixed(2);
+        d.t_temp_high = (d.high_temp *(9.0/5.0) + 32).toFixed(2);
+      } else {
+        d.t_temp_low = d.temp_low;
+      }
+      d.t_water_time = d.water_time / 60000 // converting from ms to minutes
+      d.t_water_thresh = d.water_thresh / 1024 * 100 // converting to percent
+    })
+    // getting the latest data only
+    data = data[data.length - 1];
+    console.log(data);
+    // Selecting desired div and binding data to it
+    para = d3.selectAll("#curr_thresh")
+      .datum(data);
+
+    para.append("span")
+      .text("Current Threshold Data");
+    para.append("hr");
+    // Append spans for each data item
+    para.append("span")
+      .text( function (d) { return "Low Temp: " + d.t_temp_low + "\u00B0"; });
+    para.append("span")
+      .text( function (d) { return "High Temp: " + d.t_temp_high + "\u00B0"; });
+    para.append("br");
+    para.append("span")
+      .text( function (d) {
+        return "Humidity: " + d.low_humidity + "%";
+      });
+    para.append("span")
+      .text( function (d) { return "Watering time: " + d.t_water_time; });
+    para.append("br");
+    para.append("span")
+      .text( function (d) { return "Light: " + d.light_thresh; });
+    });
 }

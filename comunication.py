@@ -20,10 +20,8 @@ sensor_data = {
 	'heat': None,
 	'light_status': None,
 	'soil_moisture_1': None,
-	'soil_moisture_2': None
-}
-
-thresh_data = {
+	'soil_moisture_2': None,
+	# threshold data
 	'low_temp' : None,
 	'high_temp' : None,
 	'water_time' : None,
@@ -74,9 +72,9 @@ while True:
 		if tmp[0] in sensor_data.keys():
 			sensor_data[tmp[0]] = tmp[1]
 			logging.info("values: %s, %s", tmp[0], tmp[1])
-		elif tmp[0] in thresh_data.keys():
-			thresh_data[tmp[0]] = tmp[1]
-			logging.info("values: %s, %s", tmp[0], tmp[1])
+		# elif tmp[0] in thresh_data.keys():
+		# 	thresh_data[tmp[0]] = tmp[1]
+		# 	logging.info("values: %s, %s", tmp[0], tmp[1])
 
 	# Changing ints to bools
 	sensor_data['heat'] = bool(int(sensor_data['heat']))
