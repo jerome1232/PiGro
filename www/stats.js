@@ -785,15 +785,16 @@ function draw_curr_thresholds(data) {
 
   data.then(function(data) {
     data.forEach(function(d) {
-      console.log(d.low_temp);
       if (isFahrenheit) {
         d.t_temp_low = (d.low_temp *(9.0/5.0) + 32).toFixed(2);
         d.t_temp_high = (d.high_temp *(9.0/5.0) + 32).toFixed(2);
       } else {
         d.t_temp_low = d.temp_low;
+        d.t_temp_high = d.temp_high;
       }
       d.t_water_time = d.water_time / 60000 // converting from ms to minutes
       d.t_water_thresh = d.water_thresh / 1024 * 100 // converting to percent
+      d.t_sleep_time = d.sleep_time / 60000
     })
     // getting the latest data only
     data = data[data.length - 1];
@@ -816,9 +817,11 @@ function draw_curr_thresholds(data) {
         return "Humidity: " + d.low_humidity + "%";
       });
     para.append("span")
-      .text( function (d) { return "Watering time: " + d.t_water_time; });
+      .text( function (d) { return "Light: " + d.light_thresh; });
     para.append("br");
     para.append("span")
-      .text( function (d) { return "Light: " + d.light_thresh; });
+      .text( function (d) { return "Watering time: " + d.t_water_time; });
+    para.append("span")
+      .text( function (d) { return "Sleep time: " + d.t_sleep_time; })
     });
 }

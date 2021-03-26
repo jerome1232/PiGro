@@ -27,7 +27,8 @@ sensor_data = {
 	'water_time' : None,
 	'light_thresh' : None,
 	'low_humidity' : None,
-	'water_thresh' : None
+	'water_thresh' : None,
+	'sleep_time' : None
 }
 
 while True:

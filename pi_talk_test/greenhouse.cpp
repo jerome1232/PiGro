@@ -59,10 +59,10 @@ void Greenhouse::begin() {
  * light operation, watering and heating.
  */
 void Greenhouse::run_tasks() {
-  operate_water();
-  operate_light();
-  operate_water();
-  operate_heat();
+  // operate_water();
+  // operate_light();
+  // operate_water();
+  // operate_heat();
   operate_lid();
 }
 
@@ -250,9 +250,12 @@ void Greenhouse::operate_lid() {
   if (_temp > _temp_high) {
     int diff = _temp - _temp_high;
     if (diff > 20) { diff = 20; }
+    diff = diff * 6; // A step multiplier
+    // move the stepper clockwise
     _stepper.move(false, diff);
     _steps += diff;
   } else {
+    // move the stepper counterclockwise
     _stepper.move(true, _steps);
     _steps = 0;
   }

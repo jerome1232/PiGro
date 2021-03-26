@@ -36,6 +36,8 @@ void loop() {
     else if (key == "light_thresh") { greenhouse.set_light_thresh(value.toInt()); }
   }
 
+  delay(10);
+
   greenhouse.run_sensor_check();
   greenhouse.run_tasks();
 
@@ -89,6 +91,7 @@ void loop() {
 
   // Turn off built-in LED light before sleep
   digitalWrite(LED_BUILTIN, LOW);
-  delay(sleep_delay);
+
   // Sleep until next loop
+  delay(sleep_delay);
 }
