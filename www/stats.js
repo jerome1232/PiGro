@@ -1,23 +1,24 @@
 // Read data
+var data = d3.json("data/sensor_data.json");
+
 const button = d3.selectAll('input[name="units"]');
 
 // Register an interval to reload the graphs every so often
-var intervalId = window.setInterval(function() {
-  update();
-}, 60000)
+// var intervalId = window.setInterval(function() {
+//   update();
+// }, 60000)
 
 // When celsius/fahrenheit are modified, update the
 // elements that involve temperature
-button.on('change', function(d) {
+button.on('change', function() {
   const isTrue = (this.value === 'true');
   localStorage.setItem("temp_unit", isTrue);
   d3.select("#temp_graph").selectAll("svg").remove();
   d3.select("#curr_data").html(null);
-  draw_temp_graph();
-  draw_latest_data();
+  draw_temp_graph(data);
+  draw_latest_data(data);
 })
 
-var data = d3.json("data/sensor_data.json");
 
 // load fahrenheit/celsius units from cache
 var unit = localStorage.getItem("temp_unit");
@@ -169,7 +170,6 @@ function draw_latest_data(data) {
 function draw_temp_graph(data) {
 
   const button = d3.selectAll('input[name="units"]');
-  // var data = d3.json("data/sensor_data.json");
   const isFahrenheit = button.property('checked');
 
   // Creating tooltip div
@@ -265,7 +265,7 @@ function draw_temp_graph(data) {
       )
 
     // Add dots with tooltips
-    svg.selectAll('dot')
+    var dots = svg.selectAll('dot')
       .data(data)
     .enter().append('circle')
       .attr('r', 1.5)
@@ -286,27 +286,61 @@ function draw_temp_graph(data) {
           .style('opacity', 0);
       })
 
-      // var zoom = d3.zoom()
-      //   .scaleExtent([0.5, 20])
-      //   .extent([[0, 0], [width, height]])
-      //   .on("zoom", updateTemp);
+    // Setting a clipPath, this is to "clip" everything outside of a certain area
+    // var clip = svg.append('defs').append('svg:clipPath')
+    //   .append('svg:rect')
+    //   .attr('width', 800)
+    //   .attr('height', 500)
+    //   .attr('x', 0)
+    //   .attr('y', 0);
 
-      //   svg.append('rect')
-      //     .attr('width', width)
-      //     .attr('height', height)
-      //     .style('fill', 'none')
-      //     .style('pointer-events', 'all')
-      //     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-      //     .call(zoom);
+    // Creating a zoom object
+    var zoom = d3.zoom()
+      .scaleExtent([0.5, 20])
+      .extent([[0, 0], [width, height]])
+      .on('zoom', updateTemp);
 
-      // function updateTemp() {
+    svg
+      .style('pointer-events', 'all')
+      .call(zoom);
 
-      //   var newX = d3.event.transform.rescaleX(x);
-      //   var newY = d3.event.transform.rescaleY(y);
+    // function to redraw while zooming
+    function updateTemp() {
+      console.log('zoomed')
+      // get the new scale
+      var transform = d3.zoomTransform(this);
+      var newX = transform.rescaleX(x);
+      var newY = transform.rescaleY(y);
 
-      //   xAxis.call(d3.axisBottom(newX));
-      //   yAxis.call(d3.axisLeft(newYU));
-      // }
+      // xAxis.scale(newX); xAxis.cal(xAxis);
+
+      // update the axes
+      xAxis.call(d3.axisBottom(newX));
+      yAxis.call(d3.axisLeft(newY));
+
+      // update the line
+      line
+        .selectAll('path')
+        .attr('d', d3.line()
+          .x(function (d) {
+            return newX(d.d_date);
+          })
+          .y(function (d) {
+            return newY(d.t_temp);
+          })
+        )
+
+      // update the chart
+      dots
+        .selectAll('dot')
+        .selectAll('circle')
+          .attr('cx', function (d) {
+            return newX(d.d_date);
+          })
+          .attr('cy', function (d) {
+            return newY(d.t_temp);
+          })
+    }
   })
 }
 
@@ -367,6 +401,7 @@ function draw_light_graph(data) {
       .style("text-anchor", "middle")
       .text("Time");
 
+    // Add Y axis
     var y = d3.scaleLinear()
       .domain([0, 1024])
       .range([height, 0]);
@@ -383,7 +418,7 @@ function draw_light_graph(data) {
       .text("Light Level");
 
     // Add a line
-    svg.append("path")
+    line = svg.append("path")
       .datum(data)
       .attr("fill", "none")
       .attr("stroke", "#e10082")
@@ -391,10 +426,10 @@ function draw_light_graph(data) {
       .attr("d", d3.line()
         .x(function(d) { return x(d.d_date) })
         .y(function(d) { return y(d.light) })
-      )
+      );
 
     // Add dots with tooltips
-    svg.selectAll('dot')
+    dots = svg.selectAll('dot')
       .data(data)
     .enter().append('circle')
       .attr('r', 1.5)
