@@ -55,6 +55,7 @@ Things needed to use this
    - TODO - Write apache config instructions
    - Demonstrate arduino compile helper scripts
    - Demonstrate arduino upload helper script
+   - Daemonize communicaiton.py [Setup pigro.service](python_src/README.md)
 ## 
 
 
