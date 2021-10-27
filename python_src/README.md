@@ -1,6 +1,14 @@
 # comunication.py setup
 
-Simply copy pigro.service to /lib/systemd/system/
+Firstly, get pip3 installed, you need the pyserial module
+to enable comunicaiton with an arduino.
+
+```sh
+sudo apt install python3-pip
+pip3 install pyserial
+```
+
+Then simply copy pigro.service to /lib/systemd/system/
 and adjust it's permissions to 644
 
 ```sh
