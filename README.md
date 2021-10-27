@@ -14,6 +14,9 @@ Currently the project tracks temperature, humidity, light leves, and soil moistu
 - [ ] Recover data file if it's corrupted.
 - [ ] Set arduino to request threshold data from
       the raspberry pi on first startup.
+- [ ] Add a way for comunicaiton.py to continue gracefully
+      if arduino device file isn't found, at least fail 
+      gracefully and leave a log about what went wrong.
 
 # Sample Web UI
 
