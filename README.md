@@ -53,8 +53,8 @@ Things needed to use this
    sudo apt install apache2
    ```
    - TODO - Write apache config instructions
-   - Demonstrate aurdino compile helper scripts
-   - Demonstrate aurdino upload helper script
+   - Demonstrate arduino compile helper scripts
+   - Demonstrate arduino upload helper script
 ## 
 
 
