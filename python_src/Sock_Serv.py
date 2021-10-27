@@ -8,7 +8,7 @@ class Server:
 	"""
 	def __init__(self, location=None):
 		if location is None:
-			self.location = 'www/sock/data.sock'
+			self.location = '../www/sock/data.sock'
 		else:
 			self.location = location
 

@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 logging.info(os.getcwd())
 
 uno = Comune_Ardu.Comune_Ardu()
-server = Sock_Serv.Server(location='home/pi/PiGro/www/cgi/sock')
+server = Sock_Serv.Server(location='../www/cgi/sock')
 
 # comunication.py
 #
