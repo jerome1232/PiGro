@@ -12,6 +12,19 @@ logging.info(os.getcwd())
 uno = Comune_Ardu.Comune_Ardu()
 server = Sock_Serv.Server(location='home/pi/PiGro/www/cgi/sock')
 
+# comunication.py
+#
+# This script is intended to be run as a daemon service. 
+#
+# It facilitates comunicaiton between the arduino Uno and the webserver
+# to visualize sensor data from a greenhouse and to send desired watering,
+# lighting, etc... thresholds to the arduino.
+#
+# It will loop forever constantly checking for comunication
+# over the serial line from an ardiuno, and checking a UDS
+# for data arriving from apace2 to send to the arduino.
+
+# Default states to set sensor data values too.
 sensor_data = {
 	'temp': None,
 	'light': None,
@@ -23,6 +36,7 @@ sensor_data = {
 	'soil_moisture_2': None
 }
 
+# Default states to set threshold data values too.
 thresh_data = {
 	'low_temp' : None,
 	'high_temp' : None,
@@ -33,8 +47,6 @@ thresh_data = {
 }
 
 while True:
-
-
 	# check the UDS for data
 	logging.info("Checking UDS")
 	data = server.get_data()
