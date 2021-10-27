@@ -51,16 +51,16 @@ Things needed to use this
     arduino-cli lib install "DHT sensor library"
     arduino-cli lib install "CheapStepper"
     ```
-   - clone this repo
-   ```sh
-   git clone https://github.com/jerome1232/PiGro.git
-   ```
-   - Install apache2
-   ```sh
-   sudo apt install apache2
-   ```
-   - TODO - Write apache config instructions
-   - Demonstrate arduino compile helper scripts
-   - Demonstrate arduino upload helper script
-   - Daemonize communicaiton.py [Setup pigro.service](python_src/README.md)
+- clone this repo
+```sh
+git clone https://github.com/jerome1232/PiGro.git
+```
+- Install apache2
+```sh
+sudo apt install apache2
+```
+- TODO - Write apache config instructions
+- Demonstrate arduino compile helper scripts
+- Demonstrate arduino upload helper script
+- Daemonize communicaiton.py [Setup pigro.service](python_src/README.md)
 ## 
