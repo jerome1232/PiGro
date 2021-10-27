@@ -11,6 +11,9 @@ Currently the project tracks temperature, humidity, light leves, and soil moistu
 - [x] Get Pi communicating thresholds back to arduino.
 - [ ] Move from static graphs to interactive graphs.
 - [x] Get the graphs to update as new data comes in.
+- [ ] Recover data file if it's corrupted.
+- [ ] Set arduino to request threshold data from
+      the raspberry pi on first startup.
 
 # Sample Web UI
 
