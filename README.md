@@ -46,7 +46,7 @@ Things needed to use this
     ```
    - clone this repo
    ```sh
-   git clone https://github.com/adafruit/DHT-sensor-library.git
+   git clone https://github.com/jerome1232/PiGro.git
    ```
    - Install apache2
    ```sh
