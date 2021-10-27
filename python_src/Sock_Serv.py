@@ -6,7 +6,6 @@ class Server:
 	"""
 	A simple socket server to listen for controls
 	"""
-
 	def __init__(self, location=None):
 		if location is None:
 			self.location = 'www/sock/data.sock'
