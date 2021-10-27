@@ -32,6 +32,10 @@ Things needed to use this
 ## Raspberry Pi Setup.
 
 - Use Raspberry Pi Imager to install [Raspian Lite](https://projects.raspberrypi.org/en/projects/imager-install)
+- Ensure Raspian is up to date.
+    ```sh
+    sudo apt update && sudo apt upgrade -y
+    ```
 - Install [Arduino CLI](https://arduino.github.io/arduino-cli/0.19/)
     -  Run the command below to download and install arduino-cli
     ```sh
@@ -57,5 +61,3 @@ Things needed to use this
    - Demonstrate arduino upload helper script
    - Daemonize communicaiton.py [Setup pigro.service](python_src/README.md)
 ## 
-
-
