@@ -11,7 +11,6 @@ Currently the project tracks temperature, humidity, light leves, and soil moistu
 - [x] Get Pi communicating thresholds back to arduino.
 - [ ] Move from static graphs to interactive graphs.
 - [x] Get the graphs to update as new data comes in.
-- [ ] Recover data file if it's corrupted.
 - [ ] Set arduino to request threshold data from
       the raspberry pi on first startup.
 - [ ] Add a way for comunicaiton.py to continue gracefully
@@ -62,7 +61,15 @@ git clone https://github.com/jerome1232/PiGro.git
 ```sh
 sudo apt install apache2
 ```
-- TODO - Write apache config instructions
+
+- Configure apache with the apache configuration script
+```sh
+# Note you may need to edit apache2_config/pigro.conf
+# and apache2_config/pigro-cgi-bin.conf respectively.
+# especiallly if you are not using the default pi
+# user, you will also need to adjust the config_apache.sh script
+sudo ~/PiGro/apache2_config/config_apache.sh
+```
 - Demonstrate arduino compile helper scripts
 - Demonstrate arduino upload helper script
 - Daemonize communicaiton.py [Setup pigro.service](python_src/README.md)
