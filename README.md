@@ -14,7 +14,7 @@ Currently the project tracks temperature, humidity, light leves, and soil moistu
 - [ ] Set arduino to request threshold data from
       the raspberry pi on first startup.
 - [ ] Add a way for comunicaiton.py to continue gracefully
-      if arduino device file isn't found, at least fail 
+      if arduino device file isn't found, at least fail
       gracefully and leave a log about what went wrong.
 
 # Sample Web UI
@@ -70,7 +70,34 @@ sudo apt install apache2
 # user, you will also need to adjust the config_apache.sh script
 sudo ~/PiGro/apache2_config/config_apache.sh
 ```
+
+Inside the arduino_src directory there are 3 helper scripts that assist with compiling and uploading the Arduino code. compile.sh, upload.sh, and compile_uplad.sh. Their use is simple, run the script and they will do their namesake.
+
 - Demonstrate arduino compile helper scripts
+
+To compile, simply cd into the arduino_src folder, and run the compile script. Give the Arduino envirnment is properly setup, it should compile the arduino code.
+
+```sh
+cd ~/PiGro/arduino_src
+./compile.sh
+```
+
 - Demonstrate arduino upload helper script
+
+When you are ready to upload the compiled code to the arduino simply call the upload script. *Note*: The upload script will restart the arduino.
+
+```sh
+cd ~/PiGro/arduino_src
+./upload.sh
+```
+
+Both can be done in one fell swoop by calling the compile_upload.sh script.
+
+```sh
+cd ~/PiGro/arduino_src
+./compile_upload.sh
+```
+
+*note*: You don't actually need to cd into arduino_src, you can run the script from anywhere with the full or relative path.
+
 - Daemonize communicaiton.py [Setup pigro.service](python_src/README.md)
-## 
