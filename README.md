@@ -100,4 +100,4 @@ cd ~/PiGro/arduino_src
 
 *note*: You don't actually need to cd into arduino_src, you can run the script from anywhere with the full or relative path.
 
-- Daemonize communicaiton.py [Setup pigro.service](python_src/README.md)
+- Daemonize communication.py [Setup pigro.service](python_src/README.md)
