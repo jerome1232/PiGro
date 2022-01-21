@@ -11,11 +11,10 @@ Currently the project tracks temperature, humidity, light leves, and soil moistu
 - [x] Get Pi communicating thresholds back to arduino.
 - [ ] Move from static graphs to interactive graphs.
 - [x] Get the graphs to update as new data comes in.
-- [ ] Recover data file if it's corrupted.
 - [ ] Set arduino to request threshold data from
       the raspberry pi on first startup.
 - [ ] Add a way for comunicaiton.py to continue gracefully
-      if arduino device file isn't found, at least fail 
+      if arduino device file isn't found, at least fail
       gracefully and leave a log about what went wrong.
 
 # Sample Web UI
@@ -35,13 +34,15 @@ Things needed to use this
 - Misc resistors, kickback diodes.
     - More details to come.
 
-## Raspberry Pi Setup.
+## Install Raspian
 
 - Use Raspberry Pi Imager to install [Raspian Lite](https://projects.raspberrypi.org/en/projects/imager-install)
 - Ensure Raspian is up to date.
     ```sh
     sudo apt update && sudo apt upgrade -y
     ```
+## Get Arduino Environment setup
+
 - Install [Arduino CLI](https://arduino.github.io/arduino-cli/0.19/)
     -  Run the command below to download and install arduino-cli
     ```sh
@@ -54,16 +55,79 @@ Things needed to use this
     arduino-cli lib install "DHT sensor library"
     arduino-cli lib install "CheapStepper"
     ```
+
+## Download PiGro
+
 - clone this repo
 ```sh
 git clone https://github.com/jerome1232/PiGro.git
 ```
+
+## Configure the environment for PiGro
+
 - Install apache2
 ```sh
 sudo apt install apache2
 ```
-- TODO - Write apache config instructions
+
+- Configure apache with the apache configuration script
+```sh
+# Note you may need to edit apache2_config/pigro.conf
+# and apache2_config/pigro-cgi-bin.conf respectively.
+# especiallly if you are not using the default pi
+# user, you will also need to adjust the config_apache.sh script
+sudo ~/PiGro/apache2_config/config_apache.sh
+```
+
+### Daemonize comunication.py
+
+Get pip3 installed, you need the pyserial module
+to enable comunicaiton with an arduino.
+
+```sh
+sudo apt install python3-pip
+pip3 install pyserial
+```
+
+Then simply copy pigro.service to /lib/systemd/system/
+and adjust it's permissions to 644
+
+```sh
+sudo cp ~/PiGro/python_src/pigro.service /lib/systemd/system/
+sudo chmod 644 /lib/systemd/system/pigro.service
+
+# reload systemctl
+sudo systemctl daemon-reload
+
+# enable pigro.service and start it
+sudo systemctl enable pigro.service
+sudo systemctl start pigro.service
+```
+
+Now pigro.service will automatically start at boot and can be controlled
+with the systemctl command!
+## Compile and upload Arduino code
+
+Inside the arduino_src directory there are 3 helper scripts that assist with compiling and uploading the Arduino code. compile.sh, upload.sh, and compile_uplad.sh. Their use is simple, run the script and they will do their namesake.
+
 - Demonstrate arduino compile helper scripts
+
+To compile, simply cd into the arduino_src folder, and run the compile script. Give the Arduino envirnment is properly setup, it should compile the arduino code.
+
+```sh
+~/PiGro/arduino_src/compile.sh
+```
+
 - Demonstrate arduino upload helper script
-- Daemonize communicaiton.py [Setup pigro.service](python_src/README.md)
-## 
+
+When you are ready to upload the compiled code to the arduino simply call the upload script. *Note*: The upload script will restart the arduino.
+
+```sh
+~/PiGro/arduino_src/upload.sh
+```
+
+Both can be done in one fell swoop by calling the compile_upload.sh script.
+
+```sh
+~/PiGro/arduino_src/compile_upload.sh
+```
