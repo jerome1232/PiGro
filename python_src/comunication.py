@@ -10,11 +10,11 @@ logging.basicConfig(level=logging.INFO)
 logging.info(os.getcwd())
 
 uno = Comune_Ardu.Comune_Ardu()
-server = Sock_Serv.Server(location='../www/cgi/sock')
+server = Sock_Serv.Server(location='/home/pi/PiGro/www/cgi/sock')
 
 # comunication.py
 #
-# This script is intended to be run as a daemon service. 
+# This script is intended to be run as a daemon service.
 #
 # It facilitates comunicaiton between the arduino Uno and the webserver
 # to visualize sensor data from a greenhouse and to send desired watering,

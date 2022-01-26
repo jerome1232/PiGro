@@ -8,7 +8,8 @@ class Sock_Client:
 
    def __init__(self, sock=None, location=None):
       if location is None:
-         self.location = 'www/sock/data.sock'
+         # self.location = '../sock/data.sock'
+         self.location = '../www/cgi/sock'
       else:
          self.location = location
 
