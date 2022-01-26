@@ -74,9 +74,7 @@ while True:
 	sensor_data['time_stamp'] = time.time()
 	logging.info("%s", datetime.datetime.fromtimestamp(sensor_data['time_stamp']))
 
-	# looping through the key : value pairs
 	for item in split_data:
-		# splitting the key from the value
 		tmp = item.split(':')
 		if len(tmp) != 2:		# Checking that we have both a key, and a value
 			print('Malformed data')
