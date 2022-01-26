@@ -3,6 +3,8 @@
 
 // int sleep_delay = 900000;           // Wait 15 minutes for next check
 
+#define MAX_ANALOG_VALUE	1023
+
 Greenhouse greenhouse = Greenhouse();
 unsigned long sleep_delay = 300000UL;   // sleep for 5 minutes
 
@@ -12,6 +14,12 @@ void setup() {
   Serial.begin(9600);
   greenhouse.begin();
   delay(1000);
+}
+
+double percentToDecimal(int n) {
+	// A small function to convert a raw percentage to
+	// it's decimal equivalent.
+	return n / 100
 }
 
 void loop() {
@@ -29,7 +37,7 @@ void loop() {
     else if (key == "sleep_time") { sleep_delay = value.toInt(); }
     else if (key == "water_time") { greenhouse.set_water_time(value.toInt()); }
     else if (key == "water_thresh") {
-      int raw_value = (value.toInt() / 100) * 1023;
+      int raw_value = (percentToDecimal(value.toInt())) * MAX_ANALOG_VALUE;
       greenhouse.set_soil_moisture_1_thresh(raw_value);
       greenhouse.set_soil_moisture_2_thresh(raw_value);
     }
