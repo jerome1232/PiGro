@@ -150,3 +150,6 @@ www/data/sensor_data.json
 
 # Unix Domain Socket
 sock
+
+# idea IDE
+.idea/

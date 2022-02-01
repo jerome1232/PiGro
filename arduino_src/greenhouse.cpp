@@ -237,23 +237,3 @@ void Greenhouse::operate_water() {
   // turn the heater back on if it was on previously
   if (heat) { heater_on(true); }
 }
-
-
-/**
- * operate_lid()
- *
- * This will open the lid to vent air if the temperature
- * rises to much. It will also lower the lid back down
- * once temperature drops below threshold.
- */
-void Greenhouse::operate_lid() {
-  if (_temp > _temp_high) {
-    int diff = _temp - _temp_high;
-    if (diff > 20) { diff = 20; }
-    _stepper.move(false, diff);
-    _steps += diff;
-  } else {
-    _stepper.move(true, _steps);
-    _steps = 0;
-  }
-}
