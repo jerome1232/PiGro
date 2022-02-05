@@ -1,10 +1,10 @@
-import commune_arduino
-import sock_server
 import time
 import datetime
 import json
 import os
 import logging
+import commune_arduino
+import sock_server
 
 logging.basicConfig(level=logging.INFO)
 logging.info(os.getcwd())

@@ -1,6 +1,6 @@
-import socket
 import logging
 import os
+import socket
 
 
 class SockServer:

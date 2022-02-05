@@ -1,27 +1,27 @@
 #!/usr/bin/env sh
 
 change_permission () {
-	echo "Modifying permissions for ${base_dir}/www"
-	chown -vR ${1}:${2} "${base_dir}/www"
-        chmod -vR g+w "${base_dir}/www"
+	echo "Modifying permissions for ${3}/www"
+	chown --verbose --recursive ${1}:${2} "${3}/www"
+        chmod --verbose --recursive g+w "${3}/www"
 }
 
 cp_configs () {
 	echo "Copying pigro.conf to ${2}/sites-available" &&
-	cp -v "${1}/apache2_config/pigro.conf" "${2}/sites-available" &&
+	cp --verbose "${1}/apache2_config/pigro.conf" "${2}/sites-available" &&
 
 	echo "Copying pigro-cgi-bin.conf to ${2}/conf-available" &&
-	cp -v "${1}/apache2_config/pigro.conf" "${2}/conf-available"
+	cp --verbose "${1}/apache2_config/pigro.conf" "${2}/conf-available"
 }
 
 main () {
 
-	base_dir="/home/pi/PiGro"
-	apache_config="/etc/apache2"
-	user="pi"
-	group="www-data"
+	local base_dir="/home/pi/PiGro"
+	local apache_config="/etc/apache2"
+	local user="pi"
+	local group="www-data"
 
-	if change_permission "${user}" "${group}"; then
+	if change_permission "${user}" "${group}" "${base_dir}"; then
 		echo "Success"
 	else
 		echo "Failed"

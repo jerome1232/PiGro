@@ -1,5 +1,6 @@
 #ifndef GREEN_HOUSE_H
 #define GREEN_HOUSE_H
+
 /**
  * @file: greenhouse.h
  * @author: Jeremy D. Jones
@@ -13,22 +14,24 @@
 #include "CheapStepper.h"
 
 #define  DHT_TYPE                DHT11
-#define  DHT_PIN                 8
-#define  LED_STRIP_PIN           3
-#define  WATER_PUMP_PIN          6
-#define  VALVE_01                7
-#define  VALVE_02                5
-#define  VALVE_03                4
+#define  DHT_PIN                  8
+#define  LED_STRIP_PIN            3
+#define  WATER_PUMP_PIN           6
+#define  VALVE_01                 7
+#define  VALVE_02                 5
+#define  VALVE_03                 4
 #define  LIGHT_SENSOR_PIN        A0
 #define  SOIL_MOISTURE01_PIN     A1
 #define  SOIL_MOISTURE02_PIN     A2
-#define  HEATER_PIN              9
+#define  HEATER_PIN               9
 #define  SOIL_MOISTURE01_ON_PIN  11
 #define  SOIL_MOISTURE02_ON_PIN  10
 #define  STEPPER_IN1              2
 #define  STEPPER_IN2             12
 #define  STEPPER_IN3             13
 #define  STEPPER_IN4             A3
+#define  BAY_1		          1
+#define  BAY_2			  2
 
 class Greenhouse {
     public:

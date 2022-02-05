@@ -1,32 +1,18 @@
 #include "Arduino.h"
 #include "greenhouse.h"
 
-// int sleep_delay = 900000;           // Wait 15 minutes for next check
-
 #define MAX_ANALOG_VALUE	1023
 
 Greenhouse greenhouse = Greenhouse();
 unsigned long sleep_delay = 300000UL;   // sleep for 5 minutes
 
-void setup() {
-  // Begin serial communication at
-  // baud rate of 9600
-  Serial.begin(9600);
-  greenhouse.begin();
-  delay(1000);
-}
-
 double percentToDecimal(int n) {
 	// A small function to convert a raw percentage to
 	// it's decimal equivalent.
-	return n / 100
+	return n / 100;
 }
 
-void loop() {
-
-  // Light up built-in LED while running sensor check
-  digitalWrite(LED_BUILTIN, HIGH);
-
+void readThresholds() {
   // Read in any available threshold settings.
   while (Serial.available() > 0) {
     String key = Serial.readStringUntil(':');
@@ -43,16 +29,27 @@ void loop() {
     }
     else if (key == "light_thresh") { greenhouse.set_light_thresh(value.toInt()); }
   }
+}
 
+void setup() {
+  // Begin serial communication at
+  // baud rate of 9600
+  const int BAUD_RATE = 9600;
+  Serial.begin(BAUD_RATE);
+}
+
+void loop() {
+  // Light up built-in LED while running sensor check
+  digitalWrite(LED_BUILTIN, HIGH);
+
+  readThresholds();
   greenhouse.run_sensor_check();
   greenhouse.run_tasks();
 
   // Write data to serial line
-  // I feel like I should be able to do this with a simple
-  // loop, but I'm not sure how yet.
   Serial.print('<');
   Serial.print("light:");
-  Serial.print(greenhouse.get_light_level());
+  Serial.write(greenhouse.get_light_level());
   Serial.print(',');
   Serial.print("temp:");
   Serial.print(greenhouse.get_temp());

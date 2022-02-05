@@ -63,25 +63,23 @@ void Greenhouse::run_tasks() {
   operate_light();
   operate_water();
   operate_heat();
-  operate_lid();
 }
 
 /*
  * Checks soil moisture for the bay passed as an int.
  */
 int Greenhouse::check_soil_moisture(int bay) {
-  int reading = -1;
+  int reading = DEFAULT;
+
   switch (bay) {
-    case 1 : digitalWrite(SOIL_MOISTURE01_ON_PIN, HIGH);
-             delay(1);
-             reading = analogRead(SOIL_MOISTURE01_PIN);
-             digitalWrite(SOIL_MOISTURE01_ON_PIN, LOW);
-             break;
-    case 2 : digitalWrite(SOIL_MOISTURE02_ON_PIN, HIGH);
-             delay(1);
-             reading = analogRead(SOIL_MOISTURE02_PIN);
-             digitalWrite(SOIL_MOISTURE02_ON_PIN, LOW);
-             break;
+    case BAY_1 : digitalWrite(SOIL_MOISTURE01_ON_PIN, HIGH);
+             	 digitalWrite(SOIL_MOISTURE01_ON_PIN, LOW);
+             	 break;
+    case BAY_2 : digitalWrite(SOIL_MOISTURE02_ON_PIN, HIGH);
+	     	 delay(1);
+              	 reading = analogRead(SOIL_MOISTURE02_PIN);
+             	 digitalWrite(SOIL_MOISTURE02_ON_PIN, LOW);
+                 break;
   }
   return reading;
 }
@@ -93,8 +91,8 @@ void Greenhouse::run_sensor_check() {
   _temp = check_temp();
   _humidity = check_humidity();
   _light_level = check_light_level();
-  _soil_moisture_1 = check_soil_moisture(1);
-  _soil_moisture_2 = check_soil_moisture(2);
+  _soil_moisture_1 = check_soil_moisture(BAY_1);
+  _soil_moisture_2 = check_soil_moisture(BAY_2);
 }
 
 /*
@@ -114,9 +112,9 @@ void Greenhouse::lights_on(bool on) {
  */
 void Greenhouse::water_pump_on(bool on) {
   if (on) {
-    digitalWrite(WATER_PUMP_PIN, HIGH);
+   //digitalWrite(WATER_PUMP_PIN, HIGH);
   } else {
-    digitalWrite(WATER_PUMP_PIN, LOW);
+    //digitalWrite(WATER_PUMP_PIN, LOW);
   }
 }
 

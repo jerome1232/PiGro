@@ -49,10 +49,10 @@ class CommuneArduino:
 
     def read(self):
         '''Reads one full message and returns it as a string.'''
-        self.ser.flush()  # flush the buffer
-        item = self.ser.read(1)  # Read a single character in from serial
-        item = item.decode()  # Decode bytes object to UTF-8 string
-        data = ''  # Initialize data to empty string
+        self.ser.flush()
+        item = self.ser.read(1)
+        item = item.decode()
+        data = ''
 
         # This loops until it finds a "start_char" to avoid
         # accidentally reading a half message.
@@ -64,9 +64,7 @@ class CommuneArduino:
         # I should probably also set some sort of upper limit to avoid
         # getting stuck looking for an end_char that is never comming.
         while item != self.end_char:
-            if item != self.start_char:  # Don't actually add the start_character
-                data = data + item  # Add the item to our data string
-            item = self.ser.read(1)  # Read the next character
+            data = data + item
+            item = self.ser.read(1)
             item = item.decode()  # Decode it to UTF-8
-
         return data
